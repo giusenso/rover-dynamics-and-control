@@ -1,8 +1,8 @@
 clear all
 
-N = normal_forces(0,0,[0;0;0])
+[N,eta] = normal_forces(0,0,[0;0;0])
 
-function N = normal_forces(phi, phiB, alpha)
+function [N,eta] = normal_forces(phi, phiB, alpha)
 
 % constant data
 m = 10;
@@ -29,6 +29,9 @@ a = R*[l1*cos(theta1)-r*sin(alpha(1)); l1*sin(theta1)+r*cos(alpha(1))]
 b = R*[lB*cos(thetaB); lB*sin(thetaB)]
 c = R*RB*[l2*cos(theta2)-r*sin(alpha(2)); l2*sin(theta2)+r*cos(alpha(2))]
 d = R*RB*[l3*cos(theta3)-r*sin(alpha(3)); l3*sin(theta3)+r*cos(alpha(3))]
+
+w = a-b;
+eta = [-sin(alpha(1)), cos(alpha(1)); -cos(alpha(1)), -sin(alpha(1))]*w
 
 a_ = abs(a(1));
 b_ = abs(b(1));
