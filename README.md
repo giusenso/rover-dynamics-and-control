@@ -1,2 +1,2 @@
 # rover-dynamics-and-control
-Vehicle System Dynamic exam.
+Vehicle System Dynamic
