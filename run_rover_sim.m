@@ -8,12 +8,13 @@ out = sim('rover_open_loop.slx');
 
 %% plot dynamics
 figure()
-plot(out.acc); hold on;
+plot(out.pos); hold on;
 plot(out.vel);
-plot(out.pos);
+plot(out.acc);
+plot(out.input, '--', 'linewidth', line_width);
 grid on;
 title("Rover dynamics");
-legend('acc_x', 'vel_x', 'pos_x');
+legend('pos_x', 'vel_x', 'acc_x', 'acc_x input');
 ylabel('Meter (m)')
 set(findall(gcf,'type','line'),'linewidth', line_width);
 set(gcf,'Renderer','Painters');
