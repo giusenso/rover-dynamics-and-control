@@ -3,7 +3,7 @@
 ### Roadmap
 - [x] Nonlinear dynamic model
 - [x] Normal forces computation
-- [x] Rolling resistance and aerodinamic drag
+- [] Rolling resistance and aerodinamic drag
 - [x] Feedback linearization
 - [x] Inverse dynamics
 - [x] Acceleration controlled control scheme
