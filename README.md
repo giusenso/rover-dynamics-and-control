@@ -1,15 +1,15 @@
-# Rover-Dynamics-and-Control
+# Rover Dynamics and Control
 
 ### Roadmap
 - [x] Nonlinear dynamic model
 - [x] Normal forces computation
-- [] Rolling resistance and aerodinamic drag
+- [x] Rolling resistance and aerodinamic drag
 - [x] Feedback linearization
 - [x] Inverse dynamics
 - [x] Acceleration controlled control scheme
 - [ ] Set-point regulation problem w\ bang-coast-bang
 - [x] mars ground acquisition
-- [ ] get ground angles in real-time 
+- [x] get ground angles in real-time 
 
 ## Table of contents
 * [Project Overview](#project-overview)
