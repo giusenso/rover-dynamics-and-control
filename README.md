@@ -1,4 +1,4 @@
-# Rover Dynamics and Control
+# Dynamics and Control of a Six-wheeled Rover with Rocker-BogieSuspension
 
 ### Roadmap
 - [x] Nonlinear dynamic model
