@@ -2,7 +2,9 @@
 
 clear; close all; clc;
 
+
 %% Set the parameters depending on the picture
+
 
 choice = 1;
 
@@ -11,8 +13,9 @@ switch choice
         I = imread('ESP_068360_1985.jpg'); % 29.5 cm/pixel (Perseverance)
         mpp = 0.295; % meters per pixel (ESP pics)
         % gaussian filter smoothing factor (sigma = 16 for maximum smoothing)
-        sigma = 16; %(ESP pic)
+        sigma = 8; %(ESP pic)
         maxHeigth = 20; % (fake param)
+
         
         
     case 2
@@ -32,10 +35,10 @@ switch choice
         
     case 4
         I = imread('volcans-mars-hirise.jpg'); % 5.196 m/pixel
-        mpp = 5.196/10; % meters per pixel (volcans pic)
+        mpp = 5.196/5; % meters per pixel (volcans pic)
         % gaussian filter smoothing factor (sigma = 16 for maximum smoothing)
         sigma = 4; %(volcans pic)
-        maxHeigth = 400/10; % (volcanos pic h_real = 400 m)
+        maxHeigth = 400/5; % (volcanos pic h_real = 400 m)
 end
 
 
@@ -54,13 +57,15 @@ hax = gca;
 hax.YTickLabel = flipud(hax.YTickLabel); % flipping the y-axis
 movegui('west');
 
+I = flip(I ,1);           % vertical flip
+I = imrotate(I,270);
+
 roi = drawline('Color','r'); % draw line interactively
 
 % Read out start and end coordinates
-startPose = [roi.Position(1,2) roi.Position(1,1)];
-goalPose = [roi.Position(2,2) roi.Position(2,1)];
+startPose = [roi.Position(1,2) roi.Position(1,1)]*mpp;
+goalPose = [roi.Position(2,2) roi.Position(2,1)]*mpp;
 
-I = flip(I ,1);           % vertical flip
 Iblur = imgaussfilt(I,sigma); % gaussian filter
 
 grayScale = rgb2gray(Iblur);   % Grayscale Image
@@ -73,6 +78,7 @@ grayScale = maxHeigth*rescale(grayScale);
 x = 0:size(grayScale,2)-1;
 y = 0:size(grayScale,1)-1;
 [X,Y] = meshgrid(mpp*x,mpp*y);  % Coordinate Matrices
+%[X,Y] = meshgrid(x,y);  % Coordinate Matrices
 
 figure(2)
 title('Mesh Plot')
@@ -83,6 +89,9 @@ ylabel('Y (m)')
 zlabel('Z (m)')
 colormap(autumn)                                   % Set ‘colormap’
 daspect([1 1 1])
+hold on
+scatter(startPose(1),startPose(2),'y')
+scatter(goalPose(1),goalPose(2),'b')
 movegui('northeast');
 
 surfaceLength = (max(x,[],'all'))*mpp;
