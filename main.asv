@@ -2,14 +2,13 @@
 
 clc; clear all; close all; warning off; 
 %bdclose('all');
-load_system('testSimulink');
 
 addpath('mars surface','utilities');
 
 choice = 0; % picture chosen or choice = 0 for a standard profile
 
 if choice == 0
-    load standardTerrainProfile.mat;
+    load standardRoadProfile.mat;
 
 else
 
@@ -56,8 +55,8 @@ end
 
 initParams4Simulink;
 set_param('testSimulink','StartTime','0','StopTime',stopTime);
-sim('testSimulink'); % running model from script
-Plots
+sim('testS'); % running model from script
+% Plots
 
 taskDuration = seconds(totalTime);
 taskDuration.Format = 'hh:mm:ss.SSS';

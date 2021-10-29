@@ -64,8 +64,9 @@ terrainProfile(2,:) = pixvals;
 
 figure(3)
 title('Terrain Profile')
+RGB_mars = '#934838';
 %plot(1:length(pixvals),pixvals,'k'), axis tight, title('pixel values')
-plot(terrainProfile(1,:),terrainProfile(2,:),'k');
+plot(terrainProfile(1,:),terrainProfile(2,:),'color',RGB_mars);
 ylabel('Z (m)');
 xlabel('X (m)');
 daspect([1 1 1]);
