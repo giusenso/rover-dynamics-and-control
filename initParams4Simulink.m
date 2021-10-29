@@ -53,7 +53,7 @@ for i = 1:length(terrainProfile)-1
 
 %     slope(i+1) = slope(i)+...
 %         ((terrainProfile(i+1,2)-terrainProfile(i,2))/timeDurationPiece(i));
-
+    
     slope(i) = terrainProfile(i,2);
 end
 
@@ -62,10 +62,15 @@ slope(end+1) = terrainProfile(end,2);
 timeStartPiece(end+1) = totalTime;
 
 terrainProfileTime = [timeStartPiece;slope]';
+terrainProfileTime = [terrainProfileTime(:,1),terrainProfile(:,1),terrainProfileTime(:,2)];
+
+stopTime = int2str(terrainProfileTime(end,1)); % end of simulation
 
 %% Contact Points
 
 CP = contactPoints(terrainProfileTime,alpha,r);
+Wheel1 = wheelPosition(terrainProfileTime,CP,alpha,r);
+
 
 
 
@@ -84,7 +89,5 @@ CP = contactPoints(terrainProfileTime,alpha,r);
 % end
 
 %%
-
-stopTime = int2str(terrainProfileTime(end,1)); % end of simulation
 
 

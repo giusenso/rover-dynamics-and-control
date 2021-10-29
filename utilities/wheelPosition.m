@@ -1,57 +1,66 @@
-%function (xW,zW) = wheelPosition(terrainProfile,contactPoint)
+function WP = wheelPosition(terrainProfile,CP,alpha,rad)
 
-clear; close all; clc;
+alpha = abs(alpha);
 
-rad = 0.25;
-x0 = 0;
-x1 = 2;
-z0 = 0;
-xCP = 2;
-hill = 1;
-flat = 0;
-z1 = hill*4;
-zCP = hill*4;
+angle = alpha(1);
+hW = rad/cos(angle); % height of the wheel center from the ground
+d = hW*sin(angle); % distance from the CP of the wheel to the zGround point
 
-if flat == 1
-    z1 = z0;
-    zCP = z0;
-end
-
-A = [x0, 0, z0];
-B = [x1, 0, z1];
-
-u = B-A;
-z_axis = [0, 0, 1];
-x_axis = [1, 0, 0];
-
-alpha = atan2(norm(cross(u,x_axis)),dot(u,x_axis));
-
-hW = rad/cos(alpha); % height of the wheel center from the ground
-d = hW*sin(alpha); % distance from the CP of the wheel to the zGround point
+t0 = terrainProfile(1,1);
+t1 = terrainProfile(2,1);
+z0 = terrainProfile(1,3);
+z1 = terrainProfile(2,3);
+x0 = terrainProfile(1,2);
+x1 = terrainProfile(2,2);
 
 if z1 > z0 % wheel rolls uphill
-    xW = xCP - d*cos(alpha); % projection on the x-axis
+    tW(1) = CP(1,1) - d*cos(angle); % projection on the x-axis
 else if z1 < z0 % wheel rolls downhill
-        xW = xCP + d*cos(alpha); % projection on the x-axis
+        tW(1) = CP(1,1) + d*cos(angle); % projection on the x-axis
 else if z1 == z0 % wheel on flat ground
-        xW = xCP;
+        tW(1) = CP(1,1);
 end
 end
 end
 
-zGround = linearRegression(x0,z0,x1,z1,xW);
+zGround = linearRegression(t0,z0,t1,z1,tW(1));
 
-zW = zGround+hW;
+zW(1) = zGround+hW;
 
-plotVectorArrow([x0,z0],[x1,z1])
-hold on
-plotVectorArrow([0,0],[1,0])
-hold on
-scatter(xW,zW);
-hold on
-plotCircle(xW,zW,rad,'r',2);
-hold on
-plotVectorArrow([xCP,zCP],[xW,zW])
-hold on
-scatter(xCP,zCP);
-daspect([1 1 1]);
+xW(1) = linearRegression(t0,x0,t1,x1,tW(1));
+
+for i =2:length(CP)
+    firstLowerIndex = find(terrainProfile(:,1)<CP(i,1),1,'last')
+    firstGreaterIndex = find(terrainProfile(:,1)>=CP(i,1),1,'first');
+    angle = alpha(firstLowerIndex);
+    hW = rad/cos(angle); % height of the wheel center from the ground
+    d = hW*sin(angle); % distance from the CP of the wheel to the zGround point
+
+    t0 = terrainProfile(firstLowerIndex,1);
+    t1 = terrainProfile(firstGreaterIndex,1);
+    z0 = terrainProfile(firstLowerIndex,3);
+    z1 = terrainProfile(firstGreaterIndex,3);
+    x0 = terrainProfile(firstLowerIndex,2);
+    x1 = terrainProfile(firstGreaterIndex,2);
+
+    if z1 > z0 % wheel rolls uphill
+        tW(i) = CP(i,1) - d*cos(angle); % projection on the x-axis
+    else if z1 < z0 % wheel rolls downhill
+            tW(i) = CP(i,1) + d*cos(angle); % projection on the x-axis
+    else if z1 == z0 % wheel on flat ground
+            tW(i) = CP(i,1);
+    end
+    end
+    end
+
+    zGround = linearRegression(t0,z0,t1,z1,tW(i));
+
+    zW(i) = zGround+hW;
+
+    xW(i) = linearRegression(t0,x0,t1,x1,tW(i));
+
+end
+
+WP = [tW;xW;zW]';
+
+end
