@@ -1,0 +1,42 @@
+figure(1)
+RGB_mars = '#934838';
+plot(terrainProfileTime(:,1),terrainProfileTime(:,2),'Color',RGB_mars);
+grid on
+hold on
+
+
+figure(2)
+RGB_mars = '#934838';
+plot(terrainProfileTime(:,1),terrainProfileTime(:,3),'Color',RGB_mars);
+grid on
+hold on
+plot(Wheel1(:,1),Wheel1(:,3),'Color','b');
+hold on
+for i = 1:length(Wheel1)
+    plotCircle(Wheel1(i,1),Wheel1(i,3),r,'r',1);
+    hold on
+end
+
+for i = 1:length(CP)
+scatter(CP(i,1),CP(i,3),'blue','+');
+hold on 
+end
+scatter(terrainProfileTime(:,1),terrainProfileTime(:,3),'Color',RGB_mars);
+
+figure(3)
+RGB_mars = '#934838';
+plot(terrainProfileTime(:,2),terrainProfileTime(:,3),'Color',RGB_mars);
+hold on
+plot(Wheel1(:,2),Wheel1(:,3),'Color','b');
+hold on
+for i = 1:length(Wheel1)
+    plotCircle(Wheel1(i,2),Wheel1(i,3),r,'r',1);
+    hold on
+end
+for i = 1:length(CP)
+scatter(CP(i,2),CP(i,3),'blue','+');
+hold on 
+end
+grid on
+hold on
+daspect([1 1 1])

@@ -1,12 +1,17 @@
 % https://www.uahirise.org/ESP_068360_1985 (25 February 2021)
 
 clc; clear all; close all; warning off; 
-%bdclose('all');
+bdclose('all');
+
+% picture chosen or choice = 0 for a pre-built profile
+choice = 0; % picture 4 recommended
+
+%%
+%%%%%% DON'T TOUCH %%%%%%
+
 load_system('testSimulink');
 
 addpath('mars surface','utilities');
-
-choice = 0; % picture chosen or choice = 0 for a standard profile
 
 if choice == 0
     load standardTerrainProfile.mat;
@@ -22,8 +27,6 @@ else
             % gaussian filter smoothing factor (sigma = 16 for maximum smoothing)
             sigma = 16; %(ESP pic)
             maxHeigth = 20; % (fake param)
-
-
 
         case 2
             I = imread('ESP_059329_2095_RGB.jpg'); % 29.5 cm/pixel
@@ -55,13 +58,13 @@ else
 end
 
 initParams4Simulink;
-set_param('testSimulink','StartTime','0','StopTime',stopTime);
-sim('testSimulink'); % running model from script
+%set_param('testSimulink','StartTime','0','StopTime',stopTime);
+%sim('testSimulink'); % running model from script
 Plots
 
 taskDuration = seconds(totalTime);
 taskDuration.Format = 'hh:mm:ss.SSS';
-fprintf("Task duration (hh:mm:ss.SSS): %s\n",string(taskDuration));
-fprintf("Distance traveled: %f [m]\n",distanceTraveled);
+fprintf("Task duration [hh:mm:ss.SSS]: %s\n",string(taskDuration));
+fprintf("Distance traveled [m]: %f\n",distanceTraveled);
 
 

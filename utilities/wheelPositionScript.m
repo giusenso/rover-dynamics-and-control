@@ -1,16 +1,16 @@
 %function WP = wheelPosition(terrainProfile,contactPoint)
 
-clear; close all; clc;
+%clear; close all; clc;
 
-rad = 0.25;
-x0 = 0;
-x1 = 2;
-z0 = 0;
-xCP = 0;
+rad = 0.525;
+x0 = 103;
+x1 = 104;
+z0 = 48.3636;
+xCP = x1;
 hill = 1;
 flat = 0;
-z1 = hill*4;
-zCP = hill*0;
+z1 = hill*50.1818;
+zCP = hill*z1;
 
 if flat == 1
     z1 = z0;
@@ -43,6 +43,7 @@ zGround = linearRegression(x0,z0,x1,z1,xW);
 
 zW = zGround+hW;
 
+figure(3)
 plotVectorArrow([x0,z0],[x1,z1])
 hold on
 plotVectorArrow([0,0],[1,0])

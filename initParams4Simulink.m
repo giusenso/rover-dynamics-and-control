@@ -1,18 +1,21 @@
 %% Model Parameters
 
 speed = 0.01; % m/s
-sampleTime = 0.5; % [s]
+sampleTime = 15; % [s] % If 0, only critical points, otherwise 15 is very dense
 
 % constant data
 m = 1025;
 g = -9.807;
-r = 1.25;
+r = 0.525; %[m]
 l1 = 2;
 lB = 1;
 l2 = 1;
 l3 = 1;
 gamma = pi/2;
 beta = pi/2;
+
+%%
+%%%%%% DON'T TOUCH %%%%%%
 
 % wheel-link angle
 theta1 = pi/2 - gamma/2;
@@ -68,8 +71,8 @@ stopTime = int2str(terrainProfileTime(end,1)); % end of simulation
 
 %% Contact Points
 
-CP = contactPoints(terrainProfileTime,alpha,r);
-Wheel1 = wheelPosition(terrainProfileTime,CP,alpha,r);
+CP = contactPoints(terrainProfileTime,alpha,r,sampleTime);
+[W1,CP,alpha] = wheelPosition(terrainProfileTime,CP,r);
 
 
 
