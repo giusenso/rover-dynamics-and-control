@@ -82,33 +82,47 @@ for i = 1:length(CP)-1
     l = l+1;
 end
 
+% if sampleTime ~= 0
+% 
+%     l = length(CP)+1;
+%     duration = sampleTime;
+% 
+% 
+%     while duration < max(terrainProfileTime(:,1))
+%         firstLowerIndex = find(terrainProfileTime(:,1)<=duration,1,'last');
+%         firstGreaterIndex = find(terrainProfileTime(:,1)>duration,1,'first');
+% 
+%         t0 = terrainProfileTime(firstLowerIndex,1);
+%         t1 = terrainProfileTime(firstGreaterIndex,1);
+%         z0 = terrainProfileTime(firstLowerIndex,3);
+%         z1 = terrainProfileTime(firstGreaterIndex,3);
+%         x0 = terrainProfileTime(firstLowerIndex,2);
+%         x1 = terrainProfileTime(firstGreaterIndex,2);
+% 
+%         tP(l,1) = duration;
+%         xP(l,2) = linearRegression(t0,x0,t1,x1,duration);
+%         zP(l,3) = linearRegression(t0,z0,t1,z1,duration);
+% 
+%         CP(l,1) = duration;
+%         CP(l,2) = linearRegression(t0,x0,t1,x1,duration);
+%         CP(l,3) = linearRegression(t0,z0,t1,z1,duration);
+% 
+%         l=l+1;
+%         duration = duration + sampleTime;
+%     end
+% 
+% end
+
 if sampleTime ~= 0
-
+    
     l = length(CP)+1;
-    duration = sampleTime;
+    numSamples = floor(max(terrainProfileTime(2:end-1,1))/sampleTime);
 
+    newPoints = interparc(numSamples,terrainProfileTime(2:end-1,1),terrainProfileTime(2:end-1,2),terrainProfileTime(2:end-1,3),'linear');
 
-    while duration < max(terrainProfileTime(:,1))
-        firstLowerIndex = find(terrainProfileTime(:,1)<=duration,1,'last');
-        firstGreaterIndex = find(terrainProfileTime(:,1)>duration,1,'first');
-
-        t0 = terrainProfileTime(firstLowerIndex,1);
-        t1 = terrainProfileTime(firstGreaterIndex,1);
-        z0 = terrainProfileTime(firstLowerIndex,3);
-        z1 = terrainProfileTime(firstGreaterIndex,3);
-        x0 = terrainProfileTime(firstLowerIndex,2);
-        x1 = terrainProfileTime(firstGreaterIndex,2);
-
-        tP(l,1) = duration;
-        xP(l,2) = linearRegression(t0,x0,t1,x1,duration);
-        zP(l,3) = linearRegression(t0,z0,t1,z1,duration);
-
-        CP(l,1) = duration;
-        CP(l,2) = linearRegression(t0,x0,t1,x1,duration);
-        CP(l,3) = linearRegression(t0,z0,t1,z1,duration);
-
+    for i = 1:length(newPoints)
+        CP(l,:) = newPoints(i,:);
         l=l+1;
-        duration = duration + sampleTime;
     end
 
 end
