@@ -1,10 +1,11 @@
 % https://www.uahirise.org/ESP_068360_1985 (25 February 2021)
 
-clc; clear all; close all; warning off; 
+clc; clear all; close all; warning off;
 bdclose('all');
 
 % picture chosen or choice = 0 for a pre-built profile
-choice = 0; % picture 4 recommended
+choice = 4; % picture 4 recommended
+CREATE_VIDEO = 1;
 
 %%
 %%%%%% DON'T TOUCH %%%%%%
@@ -14,7 +15,7 @@ load_system('testSimulink');
 addpath('mars surface','utilities');
 
 if choice == 0
-    load standardTerrainProfile.mat;
+    load standardTerrainProfile_short.mat;
 
 else
 
@@ -55,16 +56,19 @@ else
 
     terrainProfile = meshCreation(I,mpp,sigma,maxHeigth);
 
+    initParams4Simulink;
+    %set_param('testSimulink','StartTime','0','StopTime',stopTime);
+    %sim('testSimulink'); % running model from script
+    %Plots
+
+    taskDuration = seconds(totalTime);
+    taskDuration.Format = 'hh:mm:ss.SSS';
+    fprintf("Task duration [hh:mm:ss.SSS]: %s\n",string(taskDuration));
+    fprintf("Distance traveled [m]: %f\n",distanceTraveled);
+    save('standardTerrainProfile.mat');
+
 end
 
-initParams4Simulink;
-%set_param('testSimulink','StartTime','0','StopTime',stopTime);
-%sim('testSimulink'); % running model from script
-Plots
-
-taskDuration = seconds(totalTime);
-taskDuration.Format = 'hh:mm:ss.SSS';
-fprintf("Task duration [hh:mm:ss.SSS]: %s\n",string(taskDuration));
-fprintf("Distance traveled [m]: %f\n",distanceTraveled);
-
-
+if CREATE_VIDEO == 1
+    createVideo(terrainProfileTime,W1,W2,W3,r,Bogie);
+end

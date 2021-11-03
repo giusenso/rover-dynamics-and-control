@@ -13,16 +13,16 @@ l2 = 1;
 l3 = 1;
 gamma = pi/2;
 beta = pi/2;
+l1B = sqrt(l1^2 + lB^2 - 2*l1*lB*cos(gamma));
+l23 = sqrt(l2^2 + l3^2 - 2*l2*l3*cos(beta));
+theta1 = (pi-gamma)/2;
+thetaB = (pi+gamma)/2;
+theta2 = (pi-beta)/2;
+theta3 = (pi+beta)/2;
+l1B_l1_angle = acos(l1/l1B);    % for gamma=pi/2 only
 
 %%
 %%%%%% DON'T TOUCH %%%%%%
-
-% wheel-link angle
-theta1 = pi/2 - gamma/2;
-thetaB = pi/2 + gamma/2;
-theta2 = pi/2 - beta/2;
-theta3 = pi/2 + beta/2;
-
 
 %% Computation of alpha angles, time and slope on the whole profile
 
@@ -71,8 +71,12 @@ stopTime = int2str(terrainProfileTime(end,1)); % end of simulation
 
 %% Contact Points
 
-CP = contactPoints(terrainProfileTime,alpha,r,sampleTime);
-[W1,CP,alpha] = wheelPosition(terrainProfileTime,CP,r);
+firstGuess_CP = contactPointsFromTerrain(terrainProfileTime,sampleTime);
+W2 = wheel2Position(terrainProfileTime,firstGuess_CP,r);
+W1 = wheel1Position(W2,l1,l2,lB,theta1,theta2,gamma);
+[W2,W3] = wheel3Position(W2,l23);
+W3 = contactPointsFromWheel(terrainProfileTime,W3,r);
+[W2,W3,Bogie] = computePivots(l2,l3,l23,W2,W3,theta2,theta3);
 
 
 
