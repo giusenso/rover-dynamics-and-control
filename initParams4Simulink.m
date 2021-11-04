@@ -99,11 +99,11 @@ rocker_dx = rocker_ts.Data(2:end,1)-rocker_ts.Data(1:end-1,1);
 rocker_dz = rocker_ts.Data(2:end,2)-rocker_ts.Data(1:end-1,2);
 rocker_dphi = rocker_ts.Data(2:end,3)-rocker_ts.Data(1:end-1,3);
 rocker_dt = rocker_ts.Time(2:end)-rocker_ts.Time(1:end-1);
-coeff = 1;  % <-- TO BE TUNED
+coeff = 1.33;
 
 v_ref_data = zeros(length(rocker_dx),1);
 for i = 1:length(rocker_dx)
-    v_ref_data(i,1) = norm(([rocker_dx(i), rocker_dz(i)]) + coeff*abs(rocker_dphi(i)))/rocker_dt(i);
+    v_ref_data(i,1) = norm(([rocker_dx(i), rocker_dz(i)]) - coeff*abs(rocker_dphi(i)))/rocker_dt(i);
 end
 v_ref_ts = timeseries(v_ref_data, rocker_ts.Time(1:end-1));
 
