@@ -1,4 +1,4 @@
-function WP = wheel2Position(terrainProfile,CP,rad)
+function WP = wheel2Position(terrainProfile,CP,rad,DATA_AUGMENTATION)
 
 x_axis = [1, 0, 0];
 

@@ -4,13 +4,13 @@ clc; clear all; close all; warning off;
 bdclose('all');
 
 % picture chosen or choice = 0 for a pre-built profile
-choice = 0; % picture 4 recommended
+choice = 4; % picture 4 recommended
 
 %% SIMULATION SETUP
 
-DATA_AUGMENTATION = 0; % Set 1 if the simulation shows implausibility due to the lack of samplepoints
+DATA_AUGMENTATION = 1; % Set 1 if the simulation shows implausibility due to the lack of samplepoints
                        % If 1 the simulation time will increase exponentially
-LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
+LOAD_WORKSPACE = 0; % To speed up the simulation load a prebuilt workspace
 CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
 
 %%%%%% DON'T TOUCH %%%%%%
@@ -69,7 +69,7 @@ if LOAD_WORKSPACE == 0
     tStart = tic;
     fprintf("Processing terrain profile... (%f [s])\n",toc(tStart));
     initParams4Simulink;
-    save('standardTerrainProfile.mat', '-regexp', '^(?!(LOAD_WORKSPACE|choice|CREATE_VIDEO)$).')
+    save('standardTerrainProfile.mat', '-regexp', '^(?!(LOAD_WORKSPACE|choice|CREATE_VIDEO|DATA_AUGMENTATION)$).')
 else
     load standardTerrainProfile_workspace.mat;
 end

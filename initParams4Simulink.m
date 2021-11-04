@@ -73,7 +73,7 @@ stopTime = int2str(terrainProfileTime(end,1)); % end of simulation
 
 fprintf("Computing Wheel 2 positions and contact points... (%f [s])\n",toc(tStart));
 firstGuess_CP = contactPointsFromTerrain(terrainProfileTime,sampleTime);
-W2 = wheel2Position(terrainProfileTime,firstGuess_CP,r);
+W2 = wheel2Position(terrainProfileTime,firstGuess_CP,r,DATA_AUGMENTATION);
 
 fprintf("Computing Wheel 3 positions and contact points... (%f [s])\n",toc(tStart));
 [W2,W3] = wheel3Position(W2,l23);
@@ -106,4 +106,3 @@ for i = 1:length(rocker_dx)
     v_ref_data(i,1) = norm(([rocker_dx(i), rocker_dz(i)]) - coeff*abs(rocker_dphi(i)))/rocker_dt(i);
 end
 v_ref_ts = timeseries(v_ref_data, rocker_ts.Time(1:end-1));
-
