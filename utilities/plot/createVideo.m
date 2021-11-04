@@ -39,7 +39,8 @@ while i<=length(WheelPoints2)
     % Wipe the slate clean so we are plotting with a blank figure
     clf % clear figure
 
-    subplot(1,2,1)
+    %subplot(1,2,1) % left subplot
+    subplot(2,1,1) % upper subplot
     hold on
     plot(terrainProfileTime(:,2),terrainProfileTime(:,3),'Color',RGB_mars);
     hold on
@@ -70,16 +71,29 @@ while i<=length(WheelPoints2)
     draw_axis(rocker(i,2),rocker(i,3),rocker(i,4));
     hold on
 
+    xline(WheelPoints2(i,2));
+    hold on
+
     grid on
     daspect([1 1 1])
 
 
     title('Rover')
     set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+
+    infX = min(terrainProfileTime(:,2));
+    supX = max(terrainProfileTime(:,2));
+
+    infY = min(terrainProfileTime(:,3))-1;
+    supY = max(rocker(:,3))+1;
+
+    xlim([infX supX])
+    ylim([infY supY])
     %         xlim([-20 20])
     %         ylim([-10 30])
 
-    subplot(1,2,2)
+    %subplot(1,2,2) % right subplot
+    subplot(2,1,2) % lower subplot
     hold on
     plot(terrainProfileTime(:,2),terrainProfileTime(:,3),'Color',RGB_mars);
     hold on

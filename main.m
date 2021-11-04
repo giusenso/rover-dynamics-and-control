@@ -9,7 +9,7 @@ choice = 0; % picture 4 recommended
 %% SIMULATION SETUP
 
 LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
-CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
+SAVE_VIDEO = 1; % Set 1 to plot rover animation and save it
 
 %%%%%% DON'T TOUCH %%%%%%
 
@@ -59,28 +59,28 @@ else
 end
 
 %% Terrain Profile
-    
+
+if LOAD_WORKSPACE == 0
     tStart = tic;
     fprintf("Processing terrain profile... (%f [s])\n",toc(tStart));
     terrainProfile = meshCreation(I,mpp,sigma,maxHeigth);
-    
-    if LOAD_WORKSPACE == 0
-        initParams4Simulink;
-    end
-
-    fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
-    %set_param('testSimulink','StartTime','0','StopTime',stopTime);
-    %sim('testSimulink'); % running model from script
-    %Plots
-
-    taskDuration = seconds(totalTime);
-    taskDuration.Format = 'hh:mm:ss.SSS';
-    fprintf("Task duration [hh:mm:ss.SSS]: %s\n",string(taskDuration));
-    fprintf("Distance traveled [m]: %f\n",distanceTraveled);
+    initParams4Simulink;
     save('standardTerrainProfile.mat');
-    tFinish = toc(tStart);
-    fprintf("Rendering video... (%f [s])\n",tFinish);
+end
 
+fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
+%set_param('testSimulink','StartTime','0','StopTime',stopTime);
+%sim('testSimulink'); % running model from script
+%Plots
+
+taskDuration = seconds(totalTime);
+taskDuration.Format = 'hh:mm:ss.SSS';
+fprintf("Task duration [hh:mm:ss.SSS]: %s\n",string(taskDuration));
+fprintf("Distance traveled [m]: %f\n",distanceTraveled);
+tFinish = toc(tStart);
+fprintf("Rendering video... (%f [s])\n",tFinish);
+
+CREATE_VIDEO = SAVE_VIDEO;
 if CREATE_VIDEO == 1
     createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker);
 end
