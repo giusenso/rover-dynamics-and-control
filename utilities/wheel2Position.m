@@ -174,5 +174,7 @@ alpha = WP(:,10);
 WP = WP(:,1:3);
 WP = [WP,CP(:,2:3),alpha];
 
+%WP = interparc(length(WP)*10,WP(:,1),WP(:,2),WP(:,3),WP(:,4),WP(:,5),WP(:,6),'linear');
+
 end
 

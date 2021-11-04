@@ -69,7 +69,7 @@ if LOAD_WORKSPACE == 0
     initParams4Simulink;
     save('standardTerrainProfile.mat', '-regexp', '^(?!(LOAD_WORKSPACE|choice|CREATE_VIDEO)$).')
 else
-    load terrainProfile_workspace.mat;
+    load standardTerrainProfile_workspace.mat;
 end
 
 fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
