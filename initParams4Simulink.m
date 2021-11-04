@@ -19,7 +19,7 @@ theta1 = (pi-gamma)/2; % known
 thetaB = asin(l1*sin(theta1)/lB);
 theta2 = (pi-beta)/2; % known
 theta3 = theta2; % known
-phi_shift = 0.25*pi - acos(l1/l1B)
+phi_shift = 0.25*pi - acos(l1/l1B);
 
 %%
 %%%%%% DON'T TOUCH %%%%%%
