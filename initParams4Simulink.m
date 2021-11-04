@@ -11,15 +11,14 @@ l1 = 2;
 lB = 1;
 l2 = 1;
 l3 = 1;
-gamma = pi/2;
-beta = pi/2;
+gamma = pi/2; % known
+beta = pi/2; % known
 l1B = sqrt(l1^2 + lB^2 - 2*l1*lB*cos(gamma));
 l23 = sqrt(l2^2 + l3^2 - 2*l2*l3*cos(beta));
-theta1 = (pi-gamma)/2;
-thetaB = (pi+gamma)/2;
-theta2 = (pi-beta)/2;
-theta3 = (pi+beta)/2;
-l1B_l1_angle = acos(l1/l1B);    % for gamma=pi/2 only
+theta1 = (pi-gamma)/2; % known
+thetaB = asin(l1*sin(theta1)/lB);
+theta2 = (pi-beta)/2; % known
+theta3 = theta2; % known
 
 %%
 %%%%%% DON'T TOUCH %%%%%%
@@ -69,32 +68,23 @@ terrainProfileTime = [terrainProfileTime(:,1),terrainProfile(:,1),terrainProfile
 
 stopTime = int2str(terrainProfileTime(end,1)); % end of simulation
 
-%% Contact Points
+%% Wheels, Contact Points, Pivots, Phi and PhiB
 
+fprintf("Computing Wheel 2 positions and contact points... (%f [s])\n",toc(tStart));
 firstGuess_CP = contactPointsFromTerrain(terrainProfileTime,sampleTime);
 W2 = wheel2Position(terrainProfileTime,firstGuess_CP,r);
-W1 = wheel1Position(W2,l1,l2,lB,theta1,theta2,gamma);
+
+fprintf("Computing Wheel 3 positions and contact points... (%f [s])\n",toc(tStart));
 [W2,W3] = wheel3Position(W2,l23);
 W3 = contactPointsFromWheel(terrainProfileTime,W3,r);
-[W2,W3,Bogie] = computePivots(l2,l3,l23,W2,W3,theta2,theta3);
 
+fprintf("Computing Bogie positions and phiB angle... (%f [s])\n",toc(tStart));
+[W2,W3,Bogie] = computeBogie(l2,l3,W2,W3);
 
+fprintf("Computing Wheel 1 positions and contact points... (%f [s])\n",toc(tStart));
+[W1,W2,W3,Bogie] = wheel1Position(W2,W3,Bogie,l1B);
+W1 = contactPointsFromWheel(terrainProfileTime,W1,r);
 
-
-%% Wheel positions
-
-% i = 1;
-% totalSampleTime = 0;
-% numSamples = floor(totalTime/sampleTime);
-% for k = 1:numSamples
-%     cp1(k,1) = totalSampleTime;
-%     cp1(k,2) = linearRegression(terrainProfileTime(i,1),terrainProfileTime(i,2),...
-%         terrainProfileTime(i+1,1),terrainProfileTime(i+1,2),totalSampleTime);
-%     totalSampleTime = totalSampleTime + sampleTime;
-%     if totalSampleTime>terrainProfileTime(i,1)
-%     i = i+1;
-% end
-
-%%
-
+fprintf("Computing Rocker positions and phi angle... (%f [s])\n",toc(tStart));
+[W1,W2,W3,Bogie,Rocker] = computeRocker(l1,lB,W1,W2,W3,Bogie,theta1);
 

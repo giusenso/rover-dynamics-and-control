@@ -4,18 +4,22 @@ clc; clear all; close all; warning off;
 bdclose('all');
 
 % picture chosen or choice = 0 for a pre-built profile
-choice = 4; % picture 4 recommended
-CREATE_VIDEO = 1;
+choice = 0; % picture 4 recommended
 
-%%
+%% SIMULATION SETUP
+
+LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
+CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
+
 %%%%%% DON'T TOUCH %%%%%%
 
 load_system('testSimulink');
 
-addpath('mars surface','utilities');
+% Add that folder plus all subfolders to the path.
+addpath(genpath('utilities'));
 
 if choice == 0
-    load standardTerrainProfile_short.mat;
+    load standardTerrainProfile_workspace.mat;
 
 else
 
@@ -26,7 +30,7 @@ else
             I = imread('ESP_068360_1985.jpg'); % 29.5 cm/pixel (Perseverance)
             mpp = 0.295; % meters per pixel (ESP pics)
             % gaussian filter smoothing factor (sigma = 16 for maximum smoothing)
-            sigma = 16; %(ESP pic)
+            sigma = 8; %(ESP pic)
             maxHeigth = 20; % (fake param)
 
         case 2
@@ -41,7 +45,7 @@ else
             I = imread('mars_surface.jpg'); % 504.38 m/pixel
             mpp = 0.50438; % meters per pixel (mars surface pic, fake param)
             % gaussian filter smoothing factor (sigma = 16 for maximum smoothing)
-            sigma = 16; %(ESP pic)
+            sigma = 8; %(ESP pic)
             maxHeigth = 50; % (fake param)
 
         case 4
@@ -52,11 +56,19 @@ else
             maxHeigth = 400/5; % (volcanos pic h_real = 400 m)
     end
 
-    %% Terrain Profile
+end
 
+%% Terrain Profile
+    
+    tStart = tic;
+    fprintf("Processing terrain profile... (%f [s])\n",toc(tStart));
     terrainProfile = meshCreation(I,mpp,sigma,maxHeigth);
+    
+    if LOAD_WORKSPACE == 0
+        initParams4Simulink;
+    end
 
-    initParams4Simulink;
+    fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
     %set_param('testSimulink','StartTime','0','StopTime',stopTime);
     %sim('testSimulink'); % running model from script
     %Plots
@@ -66,9 +78,9 @@ else
     fprintf("Task duration [hh:mm:ss.SSS]: %s\n",string(taskDuration));
     fprintf("Distance traveled [m]: %f\n",distanceTraveled);
     save('standardTerrainProfile.mat');
-
-end
+    tFinish = toc(tStart);
+    fprintf("Rendering video... (%f [s])\n",tFinish);
 
 if CREATE_VIDEO == 1
-    createVideo(terrainProfileTime,W1,W2,W3,r,Bogie);
+    createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker);
 end

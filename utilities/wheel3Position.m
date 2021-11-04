@@ -32,9 +32,9 @@ for i = 1:length(W2)
     end
 
 end
-    W2 = sortrows(W2,1);
-    W3 = sortrows(W3,1);
-    W2 = deleteNaN(W2);
-    W3 = deleteNaN(W3);
+W2 = sortrows(W2,1);
+W3 = sortrows(W3,1);
+W2 = deleteNaN(W2);
+W3 = deleteNaN(W3);
 
 end
