@@ -4,12 +4,12 @@ clc; clear all; close all; warning off;
 bdclose('all');
 
 % picture chosen or choice = 0 for a pre-built profile
-choice = 0; % picture 4 recommended
+choice = 4; % picture 4 recommended
 
 %% SIMULATION SETUP
 
-LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
-SAVE_VIDEO = 1; % Set 1 to plot rover animation and save it
+LOAD_WORKSPACE = 0; % To speed up the simulation load a prebuilt workspace
+CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
 
 %%%%%% DON'T TOUCH %%%%%%
 
@@ -17,9 +17,13 @@ load_system('testSimulink');
 
 % Add that folder plus all subfolders to the path.
 addpath(genpath('utilities'));
+addpath(genpath('mars surface'));
 
 if choice == 0
-    load standardTerrainProfile_workspace.mat;
+    load('standardTerrainProfile_workspace.mat','terrainProfile');
+    terrainProfile = terrainProfile';
+
+    %load standardTerrainProfile_workspace.mat;
 
 else
 
@@ -56,6 +60,7 @@ else
             maxHeigth = 400/5; % (volcanos pic h_real = 400 m)
     end
 
+        terrainProfile = meshCreation(I,mpp,sigma,maxHeigth);
 end
 
 %% Terrain Profile
@@ -63,9 +68,10 @@ end
 if LOAD_WORKSPACE == 0
     tStart = tic;
     fprintf("Processing terrain profile... (%f [s])\n",toc(tStart));
-    terrainProfile = meshCreation(I,mpp,sigma,maxHeigth);
     initParams4Simulink;
-    save('standardTerrainProfile.mat');
+    save('standardTerrainProfile.mat', '-regexp', '^(?!(LOAD_WORKSPACE|SAVE_VIDEO|choice)$).');
+else
+    load standardTerrainProfile_workspace.mat;
 end
 
 fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
@@ -80,7 +86,6 @@ fprintf("Distance traveled [m]: %f\n",distanceTraveled);
 tFinish = toc(tStart);
 fprintf("Rendering video... (%f [s])\n",tFinish);
 
-CREATE_VIDEO = SAVE_VIDEO;
 if CREATE_VIDEO == 1
     createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker);
 end
