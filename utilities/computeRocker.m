@@ -28,7 +28,7 @@ for i = 1:length(W2)
     xc = W1(i,2);
     yc = W1(i,3);
     r = l1;
-    n = 1000;
+    n = 1500;
     % Generate polyshape n-points of a circle with center (xc,yc) radius r
     angle = (0:n-1)*(2*pi/n);
     C1x(i,:) = xc + r*cos(angle);
@@ -39,7 +39,7 @@ for i = 1:length(Bogie)
     xc = Bogie(i,2);
     yc = Bogie(i,3);
     r = lB;
-    n = 1000;
+    n = 1500;
     % Generate polyshape n-points of a circle with center (xc,yc) radius r
     angle = (0:n-1)*(2*pi/n);
     CBx(i,:) = xc + r*cos(angle);
@@ -71,8 +71,7 @@ end
 Rocker = [tR',xR',zR',phi'];
 
 for i = 1 : length(Rocker)
-    %if or(Rocker(i,3) < Bogie(i,3),Rocker(i,2)<W1(i,2)+l1*cos(theta1+phi))
-        if Rocker(i,3) < Bogie(i,3)
+    if or(Rocker(i,3) < Bogie(i,3),Rocker(i,2)<W1(i,2)+l1*cos(theta1+phi))
 %         W1(i,:) = NaN;
 %         W2(i,:) = NaN;
 %         W3(i,:) = NaN;
@@ -86,6 +85,13 @@ Rocker = sortrows(Rocker,1);
 W1 = sortrows(W1,1);
 W2 = sortrows(W2,1);
 W3 = sortrows(W3,1);
+
+
+Bogie = deleteDuplicates(Bogie,2);
+Rocker = deleteDuplicates(Rocker,2);
+W1 = deleteDuplicates(W1,2);
+W2 = deleteDuplicates(W2,2);
+W3 = deleteDuplicates(W3,2);
 
 W1 = deleteNaN(W1);
 W2 = deleteNaN(W2);

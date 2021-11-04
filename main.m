@@ -4,7 +4,7 @@ clc; clear all; close all; warning off;
 bdclose('all');
 
 % picture chosen or choice = 0 for a pre-built profile
-choice = 4; % picture 4 recommended
+choice = 0; % picture 4 recommended
 
 %% SIMULATION SETUP
 
@@ -20,10 +20,7 @@ addpath(genpath('utilities'));
 addpath(genpath('mars surface'));
 
 if choice == 0
-    load('standardTerrainProfile_workspace.mat','terrainProfile');
-    terrainProfile = terrainProfile';
-
-    %load standardTerrainProfile_workspace.mat;
+    load terrainProfile.mat;
 
 else
 
@@ -60,7 +57,8 @@ else
             maxHeigth = 400/5; % (volcanos pic h_real = 400 m)
     end
 
-        terrainProfile = meshCreation(I,mpp,sigma,maxHeigth);
+    terrainProfile = meshCreation(I,mpp,sigma,maxHeigth);
+
 end
 
 %% Terrain Profile
@@ -69,9 +67,9 @@ if LOAD_WORKSPACE == 0
     tStart = tic;
     fprintf("Processing terrain profile... (%f [s])\n",toc(tStart));
     initParams4Simulink;
-    save('standardTerrainProfile.mat', '-regexp', '^(?!(LOAD_WORKSPACE|SAVE_VIDEO|choice)$).');
+    save('standardTerrainProfile.mat', '-regexp', '^(?!(LOAD_WORKSPACE|choice|CREATE_VIDEO)$).')
 else
-    load standardTerrainProfile_workspace.mat;
+    load terrainProfile_workspace.mat;
 end
 
 fprintf("Running Simulink model... (%f [s])\n",toc(tStart));

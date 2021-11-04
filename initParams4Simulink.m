@@ -6,11 +6,11 @@ sampleTime = 15; % [s] % If 0, only critical points, otherwise 15 is very dense
 % constant data
 m = 1025;
 g = -9.807;
-r = 0.525/2; %[m]
-l1 = 2;
-lB = 1;
-l2 = 1;
-l3 = 1;
+r = 0.525; %[m]
+l1 = 4; % 2
+lB = 2; % 1
+l2 = 2; % 1
+l3 = 2; % 1
 gamma = pi/2; % known
 beta = pi/2; % known
 l1B = sqrt(l1^2 + lB^2 - 2*l1*lB*cos(gamma));
@@ -19,7 +19,6 @@ theta1 = (pi-gamma)/2; % known
 thetaB = asin(l1*sin(theta1)/lB);
 theta2 = (pi-beta)/2; % known
 theta3 = theta2; % known
-theta4 = gamma/2;
 
 %%
 %%%%%% DON'T TOUCH %%%%%%
