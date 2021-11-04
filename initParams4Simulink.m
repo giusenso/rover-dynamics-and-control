@@ -6,7 +6,7 @@ sampleTime = 15; % [s] % If 0, only critical points, otherwise 15 is very dense
 % constant data
 m = 1025;
 g = -9.807;
-r = 0.5; %[m]
+r = 0.5/2; %[m]
 l1 = 2; % 2
 lB = 1; % 1
 l2 = 1; % 1
@@ -88,4 +88,22 @@ W1 = contactPointsFromWheel(terrainProfileTime,W1,r);
 
 fprintf("Computing Rocker positions and phi angle... (%f [s])\n",toc(tStart));
 [W1,W2,W3,Bogie,Rocker] = computeRocker(l1,lB,W1,W2,W3,Bogie,theta1);
+
+%% Build time series
+
+bogie_ts = timeseries(Bogie(:,2:4), Bogie(:,1), 'name','bogie');
+alpha_ts = timeseries([W1(:,6), W2(:,6), W3(:,6)], W1(:,1), 'name','alpha');
+rocker_ts = timeseries(Rocker(:,2:4), Rocker(:,1), 'name','rocker');
+
+rocker_dx = rocker_ts.Data(2:end,1)-rocker_ts.Data(1:end-1,1);
+rocker_dz = rocker_ts.Data(2:end,2)-rocker_ts.Data(1:end-1,2);
+rocker_dphi = rocker_ts.Data(2:end,3)-rocker_ts.Data(1:end-1,3);
+rocker_dt = rocker_ts.Time(2:end)-rocker_ts.Time(1:end-1);
+coeff = 1;  % <-- TO BE TUNED
+
+v_ref_data = zeros(length(rocker_dx),1);
+for i = 1:length(rocker_dx)
+    v_ref_data(i,1) = norm(([rocker_dx(i), rocker_dz(i)]) + coeff*abs(rocker_dphi(i)))/rocker_dt(i);
+end
+v_ref_ts = timeseries(v_ref_data, rocker_ts.Time(1:end-1));
 

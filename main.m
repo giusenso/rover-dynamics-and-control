@@ -8,12 +8,14 @@ choice = 0; % picture 4 recommended
 
 %% SIMULATION SETUP
 
-LOAD_WORKSPACE = 0; % To speed up the simulation load a prebuilt workspace
+DATA_AUGMENTATION = 0; % Set 1 if the simulation shows implausibility due to the lack of samplepoints
+                       % If 1 the simulation time will increase exponentially
+LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
 CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
 
 %%%%%% DON'T TOUCH %%%%%%
 
-load_system('testSimulink');
+load_system('rover');
 
 % Add that folder plus all subfolders to the path.
 addpath(genpath('utilities'));
@@ -73,8 +75,8 @@ else
 end
 
 fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
-%set_param('testSimulink','StartTime','0','StopTime',stopTime);
-%sim('testSimulink'); % running model from script
+% set_param('rover','StartTime','0','StopTime',stopTime);
+% sim('rover'); % running model from script
 %Plots
 
 taskDuration = seconds(totalTime);
