@@ -1,4 +1,4 @@
-function createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker)
+function createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,acc_input_vec,vel_vec,v_ref_ts_vec)
 
 %% Draw/Render the Scenario
 %figh = figure; % figure handle
@@ -29,7 +29,20 @@ rocker = interparc(totCameraPic,Rocker(:,1),Rocker(:,2),Rocker(:,3),Rocker(:,4),
 rocker = sortrows(rocker,1);
 rocker = deleteNaN(rocker);
 
+acc_input = interparc(totCameraPic,acc_input_vec(:,1),acc_input_vec(:,2),'linear');
+acc_input = sortrows(acc_input,1);
+acc_input = deleteNaN(acc_input);
 
+vel = interparc(totCameraPic,vel_vec(:,1),vel_vec(:,2),'linear');
+vel = sortrows(vel,1);
+vel = deleteNaN(vel);
+
+v_ref = interparc(totCameraPic,v_ref_ts_vec(:,1),v_ref_ts_vec(:,2),'linear');
+v_ref = sortrows(v_ref,1);
+v_ref = deleteNaN(v_ref);
+
+error_vel(:,1) = v_ref(:,1);
+error_vel(:,2) = normalize((v_ref(:,2)-vel(:,2)),'range');
 
 RGB_mars = '#934838';
 
@@ -38,9 +51,9 @@ while i<=length(WheelPoints2)
 
     % Wipe the slate clean so we are plotting with a blank figure
     clf % clear figure
-
-    %subplot(1,2,1) % left subplot
-    subplot(2,1,1) % upper subplot
+    %%
+    subplot(3,2,2) % left subplot
+    %subplot(2,1,1) % upper subplot
     hold on
     plot(terrainProfileTime(:,2),terrainProfileTime(:,3),'Color',RGB_mars);
     hold on
@@ -78,7 +91,7 @@ while i<=length(WheelPoints2)
     daspect([1 1 1])
 
 
-    title('Rover')
+    title('Terrain profile')
     set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
 
     infX = min(terrainProfileTime(:,2));
@@ -92,8 +105,65 @@ while i<=length(WheelPoints2)
     %         xlim([-20 20])
     %         ylim([-10 30])
 
+    %%
+    
+    subplot(3,2,1) % left subplot
+    
+    title('Control effort')
+    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+    hold on
+    plot(acc_input(1:end,1),acc_input(1:end,2),'Color','b');
+    hold on
+    xline(acc_input(i,1));
+    hold on
+    
+    grid on
+
+    xlim([acc_input(1:1) acc_input(end,1)])
+    legend({'acceleration input'},'Location','northeast','Orientation','horizontal')
+    
+
+     %%
+
+    subplot(3,2,3) % left subplot
+    
+    title('Velocity tracking')
+    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+    hold on
+    plot(v_ref(1:end,1),v_ref(1:end,2),'Color','r');
+    hold on
+    plot(vel(1:end,1),vel(1:end,2),'Color','b');
+    hold on
+    xline(vel(i,1));
+    hold on
+    
+    grid on
+
+    xlim([v_ref(1:1) v_ref(end,1)])
+    legend({'velocity reference','actual velocity'},'Location','northeast','Orientation','horizontal')
+    
+
+         %%
+
+    subplot(3,2,5) % left subplot
+    
+    title('Tracking error')
+    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+    hold on
+    plot(error_vel(1:end,1),error_vel(1:end,2),'Color','b');
+    hold on
+    xline(vel(i,1));
+    hold on
+    
+    grid on
+
+    xlim([error_vel(1:1) error_vel(end,1)])
+    legend({'velocity error [%]'},'Location','northeast','Orientation','horizontal')
+    
+
+    %%
     %subplot(1,2,2) % right subplot
-    subplot(2,1,2) % lower subplot
+    subplot(3,2,[4,6]) % lower subplot
     hold on
     plot(terrainProfileTime(:,2),terrainProfileTime(:,3),'Color',RGB_mars);
     hold on
@@ -147,6 +217,9 @@ while i<=length(WheelPoints2)
 
     xlim([infX supX])
     ylim([infY supY])
+
+    title('Rover in motion')
+    set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
 
 
     % force Matlab to draw the image at this point (use drawnow or pause)

@@ -12,7 +12,7 @@ DATA_AUGMENTATION = 0; % 10; % Set different from 0 if the simulation shows impl
                        % If different from 0 the simulation time will increase exponentially
 LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
 filenameWorkspace = 'standardTerrainProfile_workspace';
-CREATE_VIDEO = 0; % Set 1 to plot rover animation and save it
+CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
 
 %%%%%% DON'T TOUCH %%%%%%
 
@@ -89,5 +89,5 @@ fprintf("Distance traveled [m]: %f\n",distanceTraveled);
 if CREATE_VIDEO == 1
     tFinish = toc(tStart);
     fprintf("Rendering video... (%f [s])\n",tFinish);
-    createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker);
+    createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,acc_input_vec,vel_vec,v_ref_ts_vec);
 end
