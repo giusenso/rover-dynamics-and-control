@@ -77,7 +77,8 @@ end
 
 fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
 set_param('rover','StartTime','0','StopTime',stopTime);
-sim('rover'); % running model from script
+simulation = sim('rover'); % running model from script
+variablesFromSimulink
 %Plots
 
 taskDuration = seconds(totalTime);
