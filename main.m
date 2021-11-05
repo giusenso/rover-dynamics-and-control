@@ -8,10 +8,11 @@ choice = 0; % picture 4 recommended
 
 %% SIMULATION SETUP
 
-DATA_AUGMENTATION = 0; % Set 1 if the simulation shows implausibility due to the lack of samplepoints
-                       % If 1 the simulation time will increase exponentially
-LOAD_WORKSPACE = 0; % To speed up the simulation load a prebuilt workspace
-CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
+DATA_AUGMENTATION = 0; % 10; % Set different from 0 if the simulation shows implausibility due to the lack of samplepoints
+                       % If different from 0 the simulation time will increase exponentially
+LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
+filenameWorkspace = 'standardTerrainProfile_workspace';
+CREATE_VIDEO = 0; % Set 1 to plot rover animation and save it
 
 %%%%%% DON'T TOUCH %%%%%%
 
@@ -71,7 +72,7 @@ if LOAD_WORKSPACE == 0
     initParams4Simulink;
     save('standardTerrainProfile.mat', '-regexp', '^(?!(LOAD_WORKSPACE|choice|CREATE_VIDEO|DATA_AUGMENTATION)$).')
 else
-    load standardTerrainProfile_workspace.mat;
+    load(filenameWorkspace);
 end
 
 fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
@@ -83,9 +84,9 @@ taskDuration = seconds(totalTime);
 taskDuration.Format = 'hh:mm:ss.SSS';
 fprintf("Task duration [hh:mm:ss.SSS]: %s\n",string(taskDuration));
 fprintf("Distance traveled [m]: %f\n",distanceTraveled);
-tFinish = toc(tStart);
-fprintf("Rendering video... (%f [s])\n",tFinish);
 
 if CREATE_VIDEO == 1
+    tFinish = toc(tStart);
+    fprintf("Rendering video... (%f [s])\n",tFinish);
     createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker);
 end
