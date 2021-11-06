@@ -7,13 +7,13 @@ tau_input_vec(:,2:4) = tau_input.Data;
 toWorkspace(simulation,'acc_input','simout2');
 acc_input_vec(:,1) = acc_input.Time;
 acc_input_vec(:,2) = acc_input.Data;
-toWorkspace(simulation,'vel','simout3');
+toWorkspace(simulation,'vel','vel');
 vel_vec(:,1) = vel.Time;
 vel_vec(:,2) = vel.Data;
-toWorkspace(simulation,'acc','simout4');
+toWorkspace(simulation,'acc','acc');
 acc_vec(:,1) = acc.Time;
 acc_vec(:,2) = acc.Data;
-toWorkspace(simulation,'pos','simout5');
+toWorkspace(simulation,'pos','pos');
 pos_vec(:,1) = pos.Time;
 pos_vec(:,2) = pos.Data;
 

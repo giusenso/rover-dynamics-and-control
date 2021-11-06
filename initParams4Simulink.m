@@ -5,7 +5,7 @@ sampleTime = 15; % [s] % If 0, only critical points, otherwise 15 is very dense
 
 % constant data
 m = 1025;
-g = -9.807;
+g = -3.721;
 r = 0.5/2; %[m]
 l1 = 2; % 2
 lB = 1; % 1
@@ -91,6 +91,10 @@ fprintf("Computing Rocker positions and phi angle... (%f [s])\n",toc(tStart));
 
 %% Build time series
 
+W1_ts = timeseries(W1(:,4:5), W1(:,1), 'name','W1');
+W2_ts = timeseries(W2(:,4:5), W2(:,1), 'name','W2');
+W3_ts = timeseries(W3(:,4:5), W3(:,1), 'name','W3');
+
 bogie_ts = timeseries(Bogie(:,2:4), Bogie(:,1), 'name','bogie');
 alpha_ts = timeseries([W1(:,6), W2(:,6), W3(:,6)], W1(:,1), 'name','alpha');
 rocker_ts = timeseries(Rocker(:,2:4), Rocker(:,1), 'name','rocker');
@@ -114,3 +118,5 @@ for i = 1:length(rocker_dx)
         v_ref_data(i,1) = v_ref_thresh;
     end
 end
+
+v_ref_ts = timeseries(v_ref_data, rocker_ts.Time(1:end-1));

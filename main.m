@@ -8,11 +8,11 @@ choice = 0; % picture 4 recommended
 
 %% SIMULATION SETUP
 
-DATA_AUGMENTATION = 0; % 10; % Set different from 0 if the simulation shows implausibility due to the lack of samplepoints
+DATA_AUGMENTATION = 10; % 10; % Set different from 0 if the simulation shows implausibility due to the lack of samplepoints
                        % If different from 0 the simulation time will increase exponentially
-LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
+LOAD_WORKSPACE = 0; % To speed up the simulation load a prebuilt workspace
 filenameWorkspace = 'standardTerrainProfile_workspace';
-CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
+CREATE_VIDEO = 0; % Set 1 to plot rover animation and save it
 
 %%%%%% DON'T TOUCH %%%%%%
 
@@ -63,6 +63,10 @@ else
     terrainProfile = meshCreation(I,mpp,sigma,maxHeigth);
 
 end
+
+%terrainProfile = [1:10; 0,0,0,0,.2,.4,.6,.6,.6,.6];
+
+terrainProfile = [1:10; 1,2,3,4,5,5,5,5,5,5];
 
 %% Terrain Profile
 
