@@ -20,8 +20,8 @@ I = imrotate(I,270);
 roi = drawline('Color','r'); % draw line interactively
 
 % Read out start and end coordinates
-startPose = [roi.Position(1,2) roi.Position(1,1)]*mpp;
-goalPose = [roi.Position(2,2) roi.Position(2,1)]*mpp;
+startPose = [roi.Position(1,2) roi.Position(1,1)];
+goalPose = [roi.Position(2,2) roi.Position(2,1)];
 
 Iblur = imgaussfilt(I,sigma); % gaussian filter
 
