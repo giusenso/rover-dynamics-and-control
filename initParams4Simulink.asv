@@ -2,25 +2,24 @@
 
 speed = 0.01; % m/s
 sampleTime = 15; % [s] % If 0, only critical points, otherwise 15 is very dense
-vehicleStructure;
-
-% constant data
-m = 1025;
-g = -3.721;
-r = 0.5/2; %[m]
-l1 = 2; % 2
-lB = 1; % 1
-l2 = 1; % 1
-l3 = 1; % 1
-gamma = pi/2; % known
-beta = pi/2; % known
-l1B = sqrt(l1^2 + lB^2 - 2*l1*lB*cos(gamma));
-l23 = sqrt(l2^2 + l3^2 - 2*l2*l3*cos(beta));
-theta1 = (pi-gamma)/2; % known
-thetaB = pi/2 + gamma/2;
-theta2 = (pi-beta)/2; % known
-theta3 = theta2; % known
-phi_shift = 0.25*pi - acos(l1/l1B);
+vehicleStructure
+% % constant data
+% m = 1025;
+% g = -3.721;
+% r = 0.5/2; %[m]
+% l1 = 2; % 2
+% lB = 1; % 1
+% l2 = 1; % 1
+% l3 = 1; % 1
+% gamma = pi/2; % known
+% beta = pi/2; % known
+% l1B = sqrt(l1^2 + lB^2 - 2*l1*lB*cos(gamma));
+% l23 = sqrt(l2^2 + l3^2 - 2*l2*l3*cos(beta));
+% theta1 = (pi-gamma)/2; % known
+% thetaB = pi/2 + gamma/2;
+% theta2 = (pi-beta)/2; % known
+% theta3 = theta2; % known
+% phi_shift = 0.25*pi - acos(l1/l1B);
 
 %%
 %%%%%% DON'T TOUCH %%%%%%

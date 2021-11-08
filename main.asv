@@ -84,8 +84,8 @@ else
 end
 
 fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
-% get_param('rover','PreLoadFcn');
-% set_param('rover','PreLoadFcn','vehicleStructure');
+get_param('rover','PreLoadFcn');
+set_param('rover','PreLoadFcn','vehicleStructure');
 set_param('rover','StartTime','0','StopTime',stopTime);
 simulation = sim('rover'); % running model from script
 variablesFromSimulink;
