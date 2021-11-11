@@ -1,4 +1,4 @@
-function createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,acc_input_vec,vel_vec,v_ref_ts_vec)
+function createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,u_input_vec,vel_vec,v_ref_ts_vec,vel_error_vec)
 
 %% Draw/Render the Scenario
 %figh = figure; % figure handle
@@ -29,9 +29,9 @@ rocker = interparc(totCameraPic,Rocker(:,1),Rocker(:,2),Rocker(:,3),Rocker(:,4),
 rocker = sortrows(rocker,1);
 rocker = deleteNaN(rocker);
 
-acc_input = interparc(totCameraPic,acc_input_vec(:,1),acc_input_vec(:,2),'linear');
-acc_input = sortrows(acc_input,1);
-acc_input = deleteNaN(acc_input);
+u_input = interparc(totCameraPic,u_input_vec(:,1),u_input_vec(:,2),'linear');
+u_input = sortrows(u_input,1);
+u_input = deleteNaN(u_input);
 
 vel = interparc(totCameraPic,vel_vec(:,1),vel_vec(:,2),'linear');
 vel = sortrows(vel,1);
@@ -41,8 +41,12 @@ v_ref = interparc(totCameraPic,v_ref_ts_vec(:,1),v_ref_ts_vec(:,2),'linear');
 v_ref = sortrows(v_ref,1);
 v_ref = deleteNaN(v_ref);
 
-error_vel(:,1) = v_ref(:,1);
-error_vel(:,2) = normalize((v_ref(:,2)-vel(:,2)),'range');
+vel_error = interparc(totCameraPic,vel_error_vec(:,1),vel_error_vec(:,2),'linear');
+vel_error = sortrows(vel_error,1);
+vel_error = deleteNaN(vel_error);
+
+vel_error(:,1) = vel_error(:,1);
+vel_error(:,2) = normalize(vel_error(:,2),'range');
 
 RGB_mars = '#934838';
 
@@ -51,7 +55,10 @@ while i<=length(WheelPoints2)
 
     % Wipe the slate clean so we are plotting with a blank figure
     clf % clear figure
-    %%
+    
+    
+    %% Whole terrain profile  
+
     subplot(3,2,2) % left subplot
     %subplot(2,1,1) % upper subplot
     hold on
@@ -102,66 +109,9 @@ while i<=length(WheelPoints2)
 
     xlim([infX supX])
     ylim([infY supY])
-    %         xlim([-20 20])
-    %         ylim([-10 30])
 
-    %%
-    
-    subplot(3,2,1) % left subplot
-    
-    title('Control effort')
-    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
-    hold on
-    plot(acc_input(1:end,1),acc_input(1:end,2),'Color','b');
-    hold on
-    xline(acc_input(i,1));
-    hold on
-    
-    grid on
+    %% Rover in motion
 
-    xlim([acc_input(1:1) acc_input(end,1)])
-    legend({'acceleration input'},'Location','northeast','Orientation','horizontal')
-    
-
-     %%
-
-    subplot(3,2,3) % left subplot
-    
-    title('Velocity tracking')
-    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
-    hold on
-    plot(v_ref(1:end,1),v_ref(1:end,2),'Color','r');
-    hold on
-    plot(vel(1:end,1),vel(1:end,2),'Color','b');
-    hold on
-    xline(vel(i,1));
-    hold on
-    
-    grid on
-
-    xlim([v_ref(1:1) v_ref(end,1)])
-    legend({'velocity reference','actual velocity'},'Location','northeast','Orientation','horizontal')
-    
-
-         %%
-
-    subplot(3,2,5) % left subplot
-    
-    title('Tracking error')
-    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
-    hold on
-    plot(error_vel(1:end,1),error_vel(1:end,2),'Color','b');
-    hold on
-    xline(vel(i,1));
-    hold on
-    
-    grid on
-
-    xlim([error_vel(1:1) error_vel(end,1)])
-    legend({'velocity error [%]'},'Location','northeast','Orientation','horizontal')
-    
-
-    %%
     %subplot(1,2,2) % right subplot
     subplot(3,2,[4,6]) % lower subplot
     hold on
@@ -169,22 +119,13 @@ while i<=length(WheelPoints2)
     hold on
     plotCircle(WheelPoints1(i,2),WheelPoints1(i,3),r,'r',1);
     hold on
-    %     plotVectorArrow([WheelPoints1(i,4),WheelPoints1(i,5)],[WheelPoints1(i,2),WheelPoints1(i,3)]);
-    %     hold on
-    %     scatter(WheelPoints1(i,4),WheelPoints1(i,5),'blue','+');
-    %     hold on
+    
     plotCircle(WheelPoints2(i,2),WheelPoints2(i,3),r,'r',1);
     hold on
-    %         plotVectorArrow([WheelPoints2(i,4),WheelPoints2(i,5)],[WheelPoints3(i,2),WheelPoints3(i,3)]);
-    %         hold on
-    %         scatter(WheelPoints2(i,4),WheelPoints2(i,5),'blue','+');
-    %         hold on
+   
     plotCircle(WheelPoints3(i,2),WheelPoints3(i,3),r,'r',1);
     hold on
-    %         scatter(WheelPoints3(i,4),WheelPoints3(i,5),'blue','+');
-    %         hold on
-    %         plotVectorArrow([WheelPoints3(i,4),WheelPoints3(i,5)],[WheelPoints3(i,2),WheelPoints3(i,3)]);
-    %         hold on
+    
 
     % draw bogie
     draw_link([WheelPoints2(i,2),WheelPoints2(i,3)],[bogie(i,2),bogie(i,3)]);
@@ -219,7 +160,65 @@ while i<=length(WheelPoints2)
     ylim([infY supY])
 
     title('Rover in motion')
-    set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+
+    %% Control effort
+    
+    subplot(3,2,1) % left subplot
+    
+    title('Control effort')
+    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+    hold on
+    plot(u_input(1:end,1),u_input(1:end,2),'Color','b');
+    hold on
+    xline(u_input(i,1));
+    hold on
+    
+    grid on
+
+    xlim([u_input(1:1) u_input(end,1)])
+    legend({'control input'},'Location','northeast','Orientation','horizontal')
+    
+
+    %% Velocity tracking
+
+    subplot(3,2,3) % left subplot
+    
+    title('Velocity tracking')
+    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+    hold on
+    plot(v_ref(1:end,1),v_ref(1:end,2),'Color','r');
+    hold on
+    plot(vel(1:end,1),vel(1:end,2),'Color','b');
+    hold on
+    xline(vel(i,1));
+    hold on
+    
+    grid on
+
+    xlim([v_ref(1:1) v_ref(end,1)])
+    legend({'velocity reference','actual velocity'},'Location','northeast','Orientation','horizontal')
+    
+
+    %% Tracking error
+
+    subplot(3,2,5) % left subplot
+    
+    title('Velocity tracking error')
+    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+    hold on
+    plot(vel_error(1:end,1),vel_error(1:end,2),'Color','b');
+    hold on
+    xline(vel_error(i,1));
+    hold on
+    
+    grid on
+
+    xlim([vel_error(1:1) vel_error(end,1)])
+    legend({'velocity error [%]'},'Location','northeast','Orientation','horizontal')
+    
+
+    
 
 
     % force Matlab to draw the image at this point (use drawnow or pause)

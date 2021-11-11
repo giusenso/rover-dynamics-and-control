@@ -1,5 +1,6 @@
 % https://www.uahirise.org/ESP_068360_1985 (25 February 2021)
-
+load_system('rover');
+save_system('rover');
 clc; clear all; close all; warning off;
 bdclose('all');
 rehash;
@@ -15,7 +16,7 @@ choice = 0; % picture 4 recommended
 DATA_AUGMENTATION = 10; % 10; % Set different from 0 if the simulation shows implausibility due to the lack of samplepoints
                        % If different from 0 the simulation time will increase exponentially
 LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
-filenameWorkspace = 'workspace';
+filenameWorkspace = 'standardTerrainProfile_workspace';
 CREATE_VIDEO = 0; % Set 1 to plot rover animation and save it
 
 %%%%%% DON'T TOUCH %%%%%%
@@ -84,8 +85,6 @@ else
 end
 
 fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
-% get_param('rover','PreLoadFcn');
-% set_param('rover','PreLoadFcn','vehicleStructure');
 set_param('rover','StartTime','0','StopTime',stopTime);
 simulation = sim('rover'); % running model from script
 variablesFromSimulink;
@@ -99,5 +98,5 @@ fprintf("Distance traveled [m]: %f\n",distanceTraveled);
 if CREATE_VIDEO == 1
     tFinish = toc(tStart);
     fprintf("Rendering video... (%f [s])\n",tFinish);
-    createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,acc_input_vec,vel_vec,v_ref_ts_vec);
+    createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,u_input_vec,vel_vec,v_ref_ts_vec,vel_error_vec);
 end
