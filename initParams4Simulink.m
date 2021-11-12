@@ -2,7 +2,6 @@
 
 speed = 0.01; % m/s
 sampleTime = 15; % [s] % If 0, only critical points, otherwise 15 is very dense
-vehicleStructure;
 
 % constant data
 m = 1025;
