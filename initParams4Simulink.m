@@ -4,8 +4,10 @@ speed = 0.01; % m/s
 sampleTime = 15; % [s] % If 0, only critical points, otherwise 15 is very dense
 
 % constant data
-m = 1025;
-g = -3.721;
+nWheels = 3; % planar case, longitudinal dynamics = 3 wheels
+mTot = 1025;
+m = mTot/2; % mTot/2 if planar case  
+g = 3.721;
 r = 0.5/2; %[m]
 l1 = 2; % 2
 lB = 1; % 1
@@ -20,6 +22,8 @@ thetaB = pi/2 + gamma/2;
 theta2 = (pi-beta)/2; % known
 theta3 = theta2; % known
 phi_shift = 0.25*pi - acos(l1/l1B);
+maxTorque = 677*nWheels; %[N m] torque max per wheel
+minTorque = -maxTorque;
 
 %%
 %%%%%% DON'T TOUCH %%%%%%
@@ -67,8 +71,6 @@ timeStartPiece(end+1) = totalTime;
 terrainProfileTime = [timeStartPiece;slope]';
 terrainProfileTime = [terrainProfileTime(:,1),terrainProfile(:,1),terrainProfileTime(:,2)];
 
-stopTime = int2str(terrainProfileTime(end,1)); % end of simulation
-
 %% Wheels, Contact Points, Pivots, Phi and PhiB
 
 fprintf("Computing Wheel 2 positions and contact points... (%f [s])\n",toc(tStart));
@@ -89,6 +91,8 @@ W1 = contactPointsFromWheel(terrainProfileTime,W1,r);
 fprintf("Computing Rocker positions and phi angle... (%f [s])\n",toc(tStart));
 [W1,W2,W3,Bogie,Rocker] = computeRocker(l1,lB,W1,W2,W3,Bogie,theta1);
 
+stopTime = int2str(Rocker(end,1)); % end of simulation
+
 %% Build time series
 
 W1_ts = timeseries(W1(:,4:5), W1(:,1), 'name','W1');
@@ -98,6 +102,9 @@ W3_ts = timeseries(W3(:,4:5), W3(:,1), 'name','W3');
 bogie_ts = timeseries(Bogie(:,2:4), Bogie(:,1), 'name','bogie');
 alpha_ts = timeseries([W1(:,6), W2(:,6), W3(:,6)], W1(:,1), 'name','alpha');
 rocker_ts = timeseries(Rocker(:,2:4), Rocker(:,1), 'name','rocker');
+
+[v_ref_x, acc_ref_x] = firstsecondderivatives(Rocker(:,1),Rocker(:,2)); 
+[v_ref_z, acc_ref_z] = firstsecondderivatives(Rocker(:,1),Rocker(:,3)); 
 
 rocker_dx = rocker_ts.Data(2:end,1)-rocker_ts.Data(1:end-1,1);
 rocker_dz = rocker_ts.Data(2:end,2)-rocker_ts.Data(1:end-1,2);
@@ -118,5 +125,6 @@ for i = 1:length(rocker_dx)
         v_ref_data(i,1) = v_ref_thresh;
     end
 end
+
 
 v_ref_ts = timeseries(v_ref_data, rocker_ts.Time(1:end-1));

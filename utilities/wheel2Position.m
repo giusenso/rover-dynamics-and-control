@@ -182,8 +182,11 @@ WP = deleteNaN(WP);
 
 if DATA_AUGMENTATION ~= 0
     l = length(WP)*DATA_AUGMENTATION;
-    WP = interparc(l,WP(:,1),WP(:,2),WP(:,3),WP(:,4),WP(:,5),WP(:,6),'linear');
+    WP_augmented = interparc(l,WP(:,1),WP(:,2),WP(:,3),WP(:,4),WP(:,5),WP(:,6),'linear');
 end
+
+WP = [WP;WP_augmented];
+WP = sortrows(WP,1);
 
 end
 

@@ -1,4 +1,4 @@
-function createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,u_input_vec,vel_vec,v_ref_ts_vec,vel_error_vec)
+function createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,u_input_vec,vel_vec,v_ref_ts_vec,vel_error_vec,speed,maxTorque,pos_ref_ts_vec,pos_vec,pos_error_vec)
 
 %% Draw/Render the Scenario
 %figh = figure; % figure handle
@@ -29,24 +29,23 @@ rocker = interparc(totCameraPic,Rocker(:,1),Rocker(:,2),Rocker(:,3),Rocker(:,4),
 rocker = sortrows(rocker,1);
 rocker = deleteNaN(rocker);
 
-u_input = interparc(totCameraPic,u_input_vec(:,1),u_input_vec(:,2),'linear');
-u_input = sortrows(u_input,1);
-u_input = deleteNaN(u_input);
+% u_input = interparc(totCameraPic,u_input_vec(:,1),u_input_vec(:,2),'linear');
+% u_input = sortrows(u_input,1);
+% u_input = deleteNaN(u_input);
 
 vel = interparc(totCameraPic,vel_vec(:,1),vel_vec(:,2),'linear');
 vel = sortrows(vel,1);
 vel = deleteNaN(vel);
 
-v_ref = interparc(totCameraPic,v_ref_ts_vec(:,1),v_ref_ts_vec(:,2),'linear');
-v_ref = sortrows(v_ref,1);
-v_ref = deleteNaN(v_ref);
+sliderTelemetry = vel(:,1); 
 
-vel_error = interparc(totCameraPic,vel_error_vec(:,1),vel_error_vec(:,2),'linear');
-vel_error = sortrows(vel_error,1);
-vel_error = deleteNaN(vel_error);
+% v_ref = interparc(totCameraPic,v_ref_ts_vec(:,1),v_ref_ts_vec(:,2),'linear');
+% v_ref = sortrows(v_ref,1);
+% v_ref = deleteNaN(v_ref);
 
-vel_error(:,1) = vel_error(:,1);
-vel_error(:,2) = normalize(vel_error(:,2),'range');
+% vel_error = interparc(totCameraPic,vel_error_vec(:,1),vel_error_vec(:,2),'linear');
+% vel_error = sortrows(vel_error,1);
+% vel_error = deleteNaN(vel_error);
 
 RGB_mars = '#934838';
 
@@ -59,7 +58,7 @@ while i<=length(WheelPoints2)
     
     %% Whole terrain profile  
 
-    subplot(3,2,2) % left subplot
+    subplot(5,2,[2,4]) % left subplot
     %subplot(2,1,1) % upper subplot
     hold on
     plot(terrainProfileTime(:,2),terrainProfileTime(:,3),'Color',RGB_mars);
@@ -99,7 +98,7 @@ while i<=length(WheelPoints2)
 
 
     title('Terrain profile')
-    set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
 
     infX = min(terrainProfileTime(:,2));
     supX = max(terrainProfileTime(:,2));
@@ -113,7 +112,7 @@ while i<=length(WheelPoints2)
     %% Rover in motion
 
     %subplot(1,2,2) % right subplot
-    subplot(3,2,[4,6]) % lower subplot
+    subplot(5,2,[6,8,10]) % lower subplot
     hold on
     plot(terrainProfileTime(:,2),terrainProfileTime(:,3),'Color',RGB_mars);
     hold on
@@ -164,62 +163,122 @@ while i<=length(WheelPoints2)
 
     %% Control effort
     
-    subplot(3,2,1) % left subplot
+    subplot(5,2,1) % left subplot
     
     title('Control effort')
     %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
     hold on
-    plot(u_input(1:end,1),u_input(1:end,2),'Color','b');
+    plot(u_input_vec(1:end,1),u_input_vec(1:end,2),'Color','b');
     hold on
-    xline(u_input(i,1));
+    yline([-maxTorque,maxTorque]);
     hold on
+    xline(sliderTelemetry(i));
     
     grid on
+    infY = -maxTorque-0.1*maxTorque;
+    supY = maxTorque+0.1*maxTorque;
 
-    xlim([u_input(1:1) u_input(end,1)])
-    legend({'control input'},'Location','northeast','Orientation','horizontal')
+    xlim([u_input_vec(1:1) u_input_vec(end,1)])
+    ylim([infY supY])
+
+    legend({'control input','control bounds'},'Location', 'Best','Orientation','horizontal')
     
 
     %% Velocity tracking
 
-    subplot(3,2,3) % left subplot
+    subplot(5,2,3) % left subplot
     
     title('Velocity tracking')
     %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
     hold on
-    plot(v_ref(1:end,1),v_ref(1:end,2),'Color','r');
+    plot(v_ref_ts_vec(1:end,1),v_ref_ts_vec(1:end,2),'Color','r');
     hold on
     plot(vel(1:end,1),vel(1:end,2),'Color','b');
     hold on
-    xline(vel(i,1));
+    xline(sliderTelemetry(i));
     hold on
     
     grid on
 
-    xlim([v_ref(1:1) v_ref(end,1)])
-    legend({'velocity reference','actual velocity'},'Location','northeast','Orientation','horizontal')
+    infY = speed-speed*0.5;
+    supY = speed+speed*0.5;
+    xlim([vel(1:1) vel(end,1)])
+    ylim([infY supY])
+
+    legend({'velocity reference','actual velocity'},'Location', 'Best','Orientation','horizontal')
     
 
-    %% Tracking error
+    %% Tracking error velocity
 
-    subplot(3,2,5) % left subplot
+    subplot(5,2,5) % left subplot
     
     title('Velocity tracking error')
     %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
     hold on
-    plot(vel_error(1:end,1),vel_error(1:end,2),'Color','b');
+    plot(vel_error_vec(1:end,1),vel_error_vec(1:end,2),'Color','b');
     hold on
-    xline(vel_error(i,1));
+    xline(sliderTelemetry(i));
     hold on
     
     grid on
 
-    xlim([vel_error(1:1) vel_error(end,1)])
-    legend({'velocity error [%]'},'Location','northeast','Orientation','horizontal')
+
+    infY = -speed;
+    supY = speed;
+    xlim([vel_error_vec(1:1) vel_error_vec(end,1)])
+    ylim([infY supY])
+
+    legend({'velocity error'},'Location', 'Best','Orientation','horizontal')
+    
+    %% Position tracking
+
+    subplot(5,2,7) % left subplot
+    
+    title('Position tracking')
+    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+    hold on
+    plot(pos_ref_ts_vec(1:end,1),pos_ref_ts_vec(1:end,2),'Color','r');
+    hold on
+    plot(pos_vec(1:end,1),pos_vec(1:end,2),'Color','b');
+    hold on
+    xline(sliderTelemetry(i));
+    hold on
+    
+    grid on
+
+%     infX = min(pos_ref_ts_vec(:,1));
+%     supX = max(pos_ref_ts_vec(:,1));
+
+    infY = min(pos_ref_ts_vec(:,2))-1;
+    supY = max(pos_ref_ts_vec(:,2))+1;
+
+    xlim([vel(1:1) vel(end,1)])
+    ylim([infY supY])
+
+    legend({'position reference','actual position'},'Location', 'Best','Orientation','horizontal')
     
 
-    
+    %% Tracking error position
 
+    subplot(5,2,9) % left subplot
+    
+    title('Position tracking error')
+    %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+    hold on
+    plot(pos_error_vec(1:end,1),pos_error_vec(1:end,2),'Color','b');
+    hold on
+    xline(sliderTelemetry(i));
+    hold on
+    
+    grid on
+
+
+    infY = -speed;
+    supY = speed;
+    xlim([vel(1:1) vel(end,1)])
+    ylim([infY supY])
+
+    legend({'position error'},'Location', 'Best','Orientation','horizontal')
 
     % force Matlab to draw the image at this point (use drawnow or pause)
     % drawnow

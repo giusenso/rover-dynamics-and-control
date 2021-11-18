@@ -3,7 +3,7 @@ N_vec(:,1) = N.Time;
 N_vec(:,2:4) = N.Data;
 toWorkspace(simulation,'u_input','control_effort');
 u_input_vec(:,1) = u_input.Time;
-u_input_vec(:,2:4) = u_input.Data;
+u_input_vec(:,2) = u_input.Data;
 toWorkspace(simulation,'vel','vel');
 vel_vec(:,1) = vel.Time;
 vel_vec(:,2) = vel.Data;
@@ -16,7 +16,12 @@ pos_vec(:,2) = pos.Data;
 toWorkspace(simulation,'vel_error','vel_err');
 vel_error_vec(:,1) = vel_error.Time;
 vel_error_vec(:,2) = vel_error.Data;
+toWorkspace(simulation,'pos_error','pos_err');
+pos_error_vec(:,1) = pos_error.Time;
+pos_error_vec(:,2) = pos_error.Data;
 
 v_ref_ts_vec(:,1) = v_ref_ts.Time;
 v_ref_ts_vec(:,2) = v_ref_ts.Data;
 
+pos_ref_ts_vec(:,1) = rocker_ts.Time;
+pos_ref_ts_vec(:,2) = rocker_ts.Data(:,1);

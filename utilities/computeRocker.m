@@ -72,10 +72,11 @@ Rocker = [tR',xR',zR',phi'];
 
 for i = 1 : length(Rocker)
     if or(Rocker(i,3) < Bogie(i,3),Rocker(i,2)<W1(i,2)+l1*cos(theta1+phi))
-%         W1(i,:) = NaN;
-%         W2(i,:) = NaN;
-%         W3(i,:) = NaN;
-%         Bogie(i,:) = NaN;
+    %if or((Rocker(i,2)-W1(i,2))^2+(Rocker(i,3)-W1(i,3))^2 ~= l1^2,(Rocker(i,2)-Bogie(i,2))^2+(Rocker(i,3)-Bogie(i,3))^2 ~= lB^2)
+        W1(i,:) = NaN;
+        W2(i,:) = NaN;
+        W3(i,:) = NaN;
+        Bogie(i,:) = NaN;
         Rocker(i,:) = NaN;
     end
 end

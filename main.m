@@ -1,33 +1,37 @@
 % https://www.uahirise.org/ESP_068360_1985 (25 February 2021)
-load_system('rover');
-save_system('rover');
+
+%% Simulink File
+
+load_system('roverDynamics');
+save_system('roverDynamics');
 clc; clear all; close all; warning off;
 bdclose('all');
 rehash;
 % sl_refresh_customizations;
 % exit
 
-
-% picture chosen or choice = 0 for a pre-built profile
-choice = 4; % picture 4 recommended
-
 %% SIMULATION SETUP
 
-DATA_AUGMENTATION = 10; % 10; % Set different from 0 if the simulation shows implausibility due to the lack of samplepoints
-                       % If different from 0 the simulation time will increase exponentially
-LOAD_WORKSPACE = 0; % To speed up the simulation load a prebuilt workspace
+% picture chosen or choice = 0 for a pre-built profile
+choice = 0; % picture 4 recommended
+
+LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
 filenameWorkspace = 'standardTerrainProfile_workspace';
 CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
 
+DATA_AUGMENTATION = 10; % 10; % Set different from 0 if the simulation shows implausibility due to the lack of samplepoints
+                       % If different from 0 the simulation time will increase exponentially
+
+
 %%%%%% DON'T TOUCH %%%%%%
 
-load_system('rover');
+load_system('roverDynamics');
 
 % Add that folder plus all subfolders to the path.
 addpath(genpath('utilities'));
 addpath(genpath('mars surface'));
 
-if choice == 0
+if choice == 0 
     load terrainProfile.mat;
 
 else
@@ -85,8 +89,8 @@ else
 end
 
 fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
-set_param('rover','StartTime','0','StopTime',stopTime);
-simulation = sim('rover'); % running model from script
+set_param('roverDynamics','StartTime','0','StopTime',stopTime);
+simulation = sim('roverDynamics'); % running model from script
 variablesFromSimulink;
 %Plots
 
@@ -95,8 +99,12 @@ taskDuration.Format = 'hh:mm:ss.SSS';
 fprintf("Task duration [hh:mm:ss.SSS]: %s\n",string(taskDuration));
 fprintf("Distance traveled [m]: %f\n",distanceTraveled);
 
+%% Create video
+
 if CREATE_VIDEO == 1
     tFinish = toc(tStart);
     fprintf("Rendering video... (%f [s])\n",tFinish);
-    createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,u_input_vec,vel_vec,v_ref_ts_vec,vel_error_vec);
+    createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,...
+        u_input_vec,vel_vec,v_ref_ts_vec,vel_error_vec,speed,maxTorque,...
+        pos_ref_ts_vec,pos_vec,pos_error_vec);
 end
