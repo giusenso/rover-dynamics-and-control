@@ -5,7 +5,7 @@
 load_system('roverDynamics');
 save_system('roverDynamics');
 clc; clear all; close all; warning off;
-bdclose('all');
+%bdclose('all');
 rehash;
 % sl_refresh_customizations;
 % exit
@@ -13,9 +13,9 @@ rehash;
 %% SIMULATION SETUP
 
 % picture chosen or choice = 0 for a pre-built profile
-choice = 0; % picture 4 recommended
+choice = 4; % picture 4 recommended
 
-LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
+LOAD_WORKSPACE = 0; % To speed up the simulation load a prebuilt workspace
 filenameWorkspace = 'standardTerrainProfile_workspace';
 CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
 
@@ -82,17 +82,17 @@ end
 if LOAD_WORKSPACE == 0
     tStart = tic;
     fprintf("Processing terrain profile... (%f [s])\n",toc(tStart));
-    initParams4Simulink;
     save('standardTerrainProfile.mat', '-regexp', '^(?!(LOAD_WORKSPACE|choice|CREATE_VIDEO|DATA_AUGMENTATION)$).')
 else
     load(filenameWorkspace);
 end
 
+initParams4Simulink;
 fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
 set_param('roverDynamics','StartTime','0','StopTime',stopTime);
 simulation = sim('roverDynamics'); % running model from script
 variablesFromSimulink;
-%Plots
+Plots
 
 taskDuration = seconds(totalTime);
 taskDuration.Format = 'hh:mm:ss.SSS';
@@ -105,6 +105,6 @@ if CREATE_VIDEO == 1
     tFinish = toc(tStart);
     fprintf("Rendering video... (%f [s])\n",tFinish);
     createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,...
-        u_input_vec,vel_vec,v_ref_ts_vec,vel_error_vec,speed,maxTorque,...
-        pos_ref_ts_vec,pos_vec,pos_error_vec);
+        u_input_vec,vel_x_vec,v_ref_ts_vec(:,1:2),vel_error_x_vec,speed,maxTorque,...
+        pos_ref_ts_vec(:,1:2),pos_x_vec,pos_error_x_vec);
 end
