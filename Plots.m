@@ -1,32 +1,190 @@
-figure(4)
-RGB_mars = '#934838';
-plot(terrainProfileTime(:,1),terrainProfileTime(:,2),'Color',RGB_mars);
-grid on
-hold on
+%% Control effort velocity
 
+figure(4)
+
+title('Control effort')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+hold on
+plot(u_input_vec(1:end,1),u_input_vec(1:end,2),'Color','b');
+hold on
+yline([-maxTorque,maxTorque]);
+hold on
+grid on
+infY = -maxTorque-0.1*maxTorque;
+supY = maxTorque+0.1*maxTorque;
+
+xlim([u_input_vec(1:1) u_input_vec(end,1)])
+ylim([infY supY])
+
+legend({'control input','control bounds'},'Location', 'Best','Orientation','horizontal')
+
+
+%% Velocity tracking
 
 figure(5)
-RGB_mars = '#934838';
-plot(terrainProfileTime(:,1),terrainProfileTime(:,3),'Color',RGB_mars);
-grid on
+
+title('Velocity tracking X')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
 hold on
-plot(W1(:,1),W1(:,3),'Color','b');
+plot(v_ref_ts_vec(1:end,1),v_ref_ts_vec(1:end,2),'Color','r');
+hold on
+plot(vel_x_vec(1:end,1),vel_x_vec(1:end,2),'Color','b');
 hold on
 
-figure(6)
-RGB_mars = '#934838';
-plot(terrainProfileTime(:,2),terrainProfileTime(:,3),'Color',RGB_mars);
-hold on
-%plot(W3(:,2),W3(:,3),'Color','b');
-hold on
-for i = 1:length(W3)
-    plotCircle(W3(i,2),W3(i,3),r,'r',1);
-    hold on
-end
-% for i = 1:length(CP)
-% %scatter(CP(i,2),CP(i,3),'blue','+');
-% hold on 
-% end
 grid on
+
+infY = speed-speed*0.5;
+supY = speed+speed*0.5;
+xlim([vel_x_vec(1:1) vel_x_vec(end,1)])
+ylim([infY supY])
+
+legend({'velocity reference','actual velocity'},'Location', 'Best','Orientation','horizontal')
+
+%%
+
+figure(6)
+
+title('Velocity tracking Z')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
 hold on
-daspect([1 1 1])
+plot(v_ref_ts_vec(1:end,1),v_ref_ts_vec(1:end,3),'Color','r');
+hold on
+plot(vel_z_vec(1:end,1),vel_z_vec(1:end,2),'Color','b');
+hold on
+
+grid on
+
+infY = speed-speed*0.5;
+supY = speed+speed*0.5;
+xlim([vel_z_vec(1:1) vel_z_vec(end,1)])
+ylim([infY supY])
+
+legend({'velocity reference','actual velocity'},'Location', 'Best','Orientation','horizontal')
+
+
+%% Tracking error velocity
+
+figure(7)
+
+title('Velocity tracking error X')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+hold on
+plot(vel_error_x_vec(1:end,1),vel_error_x_vec(1:end,2),'Color','b');
+hold on
+grid on
+
+
+infY = -speed;
+supY = speed;
+xlim([vel_error_x_vec(1:1) vel_error_x_vec(end,1)])
+ylim([infY supY])
+
+legend({'velocity error'},'Location', 'Best','Orientation','horizontal')
+
+%%
+
+figure(8)
+
+title('Velocity tracking error Z')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+hold on
+plot(vel_error_z_vec(1:end,1),vel_error_z_vec(1:end,2),'Color','b');
+hold on
+grid on
+
+
+infY = -speed;
+supY = speed;
+xlim([vel_error_z_vec(1:1) vel_error_z_vec(end,1)])
+ylim([infY supY])
+
+legend({'velocity error'},'Location', 'Best','Orientation','horizontal')
+
+%% Position tracking
+
+figure(9)
+
+title('Position tracking X')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+hold on
+plot(pos_ref_ts_vec(1:end,1),pos_ref_ts_vec(1:end,2),'Color','r');
+hold on
+plot(pos_x_vec(1:end,1),pos_x_vec(1:end,2),'Color','b');
+hold on
+
+grid on
+
+%     infX = min(pos_ref_ts_vec(:,1));
+%     supX = max(pos_ref_ts_vec(:,1));
+
+infY = min(pos_ref_ts_vec(:,2))-1;
+supY = max(pos_ref_ts_vec(:,2))+1;
+
+xlim([vel_x_vec(1:1) vel_x_vec(end,1)])
+ylim([infY supY])
+
+legend({'position reference','actual position'},'Location', 'Best','Orientation','horizontal')
+
+%%
+
+figure(10)
+
+title('Position tracking Z')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+hold on
+plot(pos_ref_ts_vec(1:end,1),pos_ref_ts_vec(1:end,3),'Color','r');
+hold on
+plot(pos_z_vec(1:end,1),pos_z_vec(1:end,2),'Color','b');
+hold on
+
+grid on
+
+%     infX = min(pos_ref_ts_vec(:,1));
+%     supX = max(pos_ref_ts_vec(:,1));
+
+infY = min(pos_ref_ts_vec(:,3))-1;
+supY = max(pos_ref_ts_vec(:,3))+1;
+
+xlim([vel_z_vec(1:1) vel_z_vec(end,1)])
+ylim([infY supY])
+
+legend({'position reference','actual position'},'Location', 'Best','Orientation','horizontal')
+
+%% Tracking error position
+
+figure(11)
+
+title('Position tracking error X')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+hold on
+plot(pos_error_x_vec(1:end,1),pos_error_x_vec(1:end,2),'Color','b');
+hold on
+grid on
+
+
+infY = -speed;
+supY = speed;
+xlim([vel_x_vec(1:1) vel_x_vec(end,1)])
+ylim([infY supY])
+
+legend({'position error'},'Location', 'Best','Orientation','horizontal')
+
+%%
+
+figure(12)
+
+title('Position tracking error Z')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+hold on
+plot(pos_error_z_vec(1:end,1),pos_error_z_vec(1:end,2),'Color','b');
+hold on
+grid on
+
+
+infY = -speed;
+supY = speed;
+xlim([vel_z_vec(1:1) vel_z_vec(end,1)])
+ylim([infY supY])
+
+legend({'position error'},'Location', 'Best','Orientation','horizontal')
+
