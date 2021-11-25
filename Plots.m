@@ -1,4 +1,4 @@
-%% Control effort velocity
+%% Control effort torque
 
 figure(4)
 
@@ -54,7 +54,7 @@ hold on
 
 grid on
 
-infY = speed-speed*0.5;
+infY = -speed-speed*0.5;
 supY = speed+speed*0.5;
 xlim([vel_z_vec(1:1) vel_z_vec(end,1)])
 ylim([infY supY])
@@ -187,4 +187,66 @@ xlim([vel_z_vec(1:1) vel_z_vec(end,1)])
 ylim([infY supY])
 
 legend({'position error'},'Location', 'Best','Orientation','horizontal')
+
+%% Tractions
+
+figure(13)
+
+subplot(3,1,1);
+title('Traction control Wheel 1')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+hold on
+plot(T1_vec(1:end,1),T1_vec(1:end,4),'Color','b');
+hold on
+% plot(N_vec(1:end,1),N_vec(:,2)*tractionCoefficient,'Color','g');
+% hold on
+yline([(minTorque/nWheels)/r,(maxTorque/nWheels)/r]);
+hold on
+grid on
+infY = (minTorque/nWheels)/r-0.1*(minTorque/nWheels)/r;
+supY = (maxTorque/nWheels)/r+0.1*(maxTorque/nWheels)/r;
+
+xlim([T1_vec(1:1) T1_vec(end,1)])
+ylim([infY supY])
+
+legend({'T1 input','T1 bounds'},'Location', 'Best','Orientation','horizontal')
+
+subplot(3,1,2); 
+title('Traction control Wheel 2')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+hold on
+plot(T2_vec(1:end,1),T2_vec(1:end,4),'Color','b');
+hold on
+% plot(N_vec(1:end,1),N_vec(:,3)*tractionCoefficient,'Color','g');
+% hold on
+yline([(minTorque/nWheels)/r,(maxTorque/nWheels)/r]);
+hold on
+grid on
+infY = (minTorque/nWheels)/r-0.1*(minTorque/nWheels)/r;
+supY = (maxTorque/nWheels)/r+0.1*(maxTorque/nWheels)/r;
+
+xlim([T2_vec(1:1) T2_vec(end,1)])
+ylim([infY supY])
+
+legend({'T2 input','T2 bounds'},'Location', 'Best','Orientation','horizontal')
+
+subplot(3,1,3);
+
+title('Traction control Wheel 3')
+%set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
+hold on
+plot(T3_vec(1:end,1),T3_vec(1:end,4),'Color','b');
+hold on
+% plot(N_vec(1:end,1),N_vec(:,4)*tractionCoefficient,'Color','g');
+% hold on
+yline([(minTorque/nWheels)/r,(maxTorque/nWheels)/r]);
+hold on
+grid on
+infY = (minTorque/nWheels)/r-0.1*(minTorque/nWheels)/r;
+supY = (maxTorque/nWheels)/r+0.1*(maxTorque/nWheels)/r;
+
+xlim([T3_vec(1:1) T3_vec(end,1)])
+ylim([infY supY])
+
+legend({'T3 input','T3 bounds'},'Location', 'Best','Orientation','horizontal')
 

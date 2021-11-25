@@ -13,11 +13,11 @@ rehash;
 %% SIMULATION SETUP
 
 % picture chosen or choice = 0 for a pre-built profile
-choice = 4; % picture 4 recommended
+choice = 0; % picture 4 recommended
 
-LOAD_WORKSPACE = 0; % To speed up the simulation load a prebuilt workspace
+LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
 filenameWorkspace = 'standardTerrainProfile_workspace';
-CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
+CREATE_VIDEO = 0; % Set 1 to plot rover animation and save it
 
 DATA_AUGMENTATION = 10; % 10; % Set different from 0 if the simulation shows implausibility due to the lack of samplepoints
                        % If different from 0 the simulation time will increase exponentially
@@ -73,9 +73,6 @@ else
 
 end
 
-%terrainProfile = [1:10; 0,0,0,0,.2,.4,.6,.6,.6,.6];
-
-%terrainProfile = [1:10; 1,2,3,4,5,5,5,5,5,5];
 
 %% Terrain Profile
 
@@ -92,12 +89,14 @@ fprintf("Running Simulink model... (%f [s])\n",toc(tStart));
 set_param('roverDynamics','StartTime','0','StopTime',stopTime);
 simulation = sim('roverDynamics'); % running model from script
 variablesFromSimulink;
+
 Plots
 
 taskDuration = seconds(totalTime);
 taskDuration.Format = 'hh:mm:ss.SSS';
 fprintf("Task duration [hh:mm:ss.SSS]: %s\n",string(taskDuration));
 fprintf("Distance traveled [m]: %f\n",distanceTraveled);
+
 
 %% Create video
 

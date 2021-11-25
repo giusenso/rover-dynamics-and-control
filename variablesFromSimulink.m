@@ -4,6 +4,29 @@ N_vec(:,2:4) = N.Data;
 toWorkspace(simulation,'u_input','control_effort');
 u_input_vec(:,1) = u_input.Time;
 u_input_vec(:,2) = u_input.Data;
+toWorkspace(simulation,'T','traction_effort');
+T1_vec(:,1) = T.Time;
+T2_vec(:,1) = T.Time;
+T3_vec(:,1) = T.Time;
+T1_vec(:,2) = T.Data(:,1);
+T1_vec(:,3) = T.Data(:,4);
+T2_vec(:,2) = T.Data(:,2);
+T2_vec(:,3) = T.Data(:,5);
+T3_vec(:,2) = T.Data(:,3);
+T3_vec(:,3) = T.Data(:,6);
+
+for i = 1 : length(T1_vec)
+    T1_vec(i,4) = sqrt(T1_vec(i,2)^2+T1_vec(i,3)^2);
+end
+
+for i = 1 : length(T2_vec)
+    T2_vec(i,4) = sqrt(T2_vec(i,2)^2+T2_vec(i,3)^2);
+end
+
+for i = 1 : length(T3_vec)
+    T3_vec(i,4) = sqrt(T3_vec(i,2)^2+T3_vec(i,3)^2);
+end
+
 toWorkspace(simulation,'vel_x','vel_x');
 vel_x_vec(:,1) = vel_x.Time;
 vel_x_vec(:,2) = vel_x.Data;

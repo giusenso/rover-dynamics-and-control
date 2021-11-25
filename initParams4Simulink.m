@@ -13,6 +13,7 @@ if LOAD_WORKSPACE == 0
     mTot = 1025;
     m = mTot/2; % mTot/2 if planar case
     Iyy = 1/12*m*(H^2+L^2); % Mass moment of inertia
+    tractionCoeff = 0.5; % https://asmedigitalcollection.asme.org/memagazineselect/article-pdf/120/04/74/6381472/me-1998-apr6.pdf
     g = 3.721;
     r = 0.5/2; %[m]
     l1 = 2; % 2
