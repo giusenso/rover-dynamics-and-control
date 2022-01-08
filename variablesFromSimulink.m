@@ -4,6 +4,18 @@ N_vec(:,2:4) = N.Data;
 toWorkspace(simulation,'u_input','control_effort');
 u_input_vec(:,1) = u_input.Time;
 u_input_vec(:,2) = u_input.Data;
+toWorkspace(simulation,'T_Pacejka','T_Pacejka');
+T_Pacejka_vec(:,1) = T_Pacejka.Time;
+T_Pacejka_help = T_Pacejka.Data;
+for i = 1:length(T_Pacejka_help)
+    T_Pacejka_vec(i,2:4)=T_Pacejka_help(1,:,i);
+end
+toWorkspace(simulation,'slipRatio','slipRatio');
+slipRatio_vec(:,1) = slipRatio.Time;
+slipRatio_help = slipRatio.Data;
+for i = 1:length(slipRatio_help)
+    slipRatio_vec(i,2:4)=slipRatio_help(:,1,i);
+end
 toWorkspace(simulation,'T','traction_effort');
 T1_vec(:,1) = T.Time;
 T2_vec(:,1) = T.Time;

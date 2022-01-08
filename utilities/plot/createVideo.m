@@ -1,9 +1,11 @@
-function createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,u_input_vec,vel_vec,v_ref_ts_vec,vel_error_vec,speed,maxTorque,pos_ref_ts_vec,pos_vec,pos_error_vec)
+function createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,u_input_vec,vel_vec,v_ref_ts_vec,vel_error_vec,speed,maxTorque,pos_ref_ts_vec,pos_vec,pos_error_vec,taskDuration,distanceTraveled)
 
 %% Draw/Render the Scenario
 %figh = figure; % figure handle
 %figure(3);
 figh = figureFullScreen(100);
+txt = "Rocker-Bogie Live Telemetry  \rightarrow   [ Task duration [hh:mm:ss.SSS]: " + string(taskDuration) +...
+    "   -   Distance traveled [m]: " + num2str(distanceTraveled) + " ]";
 
 fps = 25;
 videoLength = 30; %[s]
@@ -55,6 +57,7 @@ while i<=length(WheelPoints2)
     % Wipe the slate clean so we are plotting with a blank figure
     clf % clear figure
     
+    sgtitle(txt)
     
     %% Whole terrain profile  
 

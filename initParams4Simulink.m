@@ -152,6 +152,38 @@ omega_dot_ref_time = Rocker(:,1);
 
 omega_dot_ref_ts = timeseries(omega_dot_ref, omega_dot_ref_time);
 
+[v_W1_x, acc_W1_x] = firstsecondderivatives(W1(:,1),W1(:,2));
+[v_W1_z, acc_W1_z] = firstsecondderivatives(W1(:,1),W1(:,3));
+v_W1_data = [v_W1_x; v_W1_z];
+v_W1_time = W1(:,1);
+v_W1_ts = timeseries(v_W1_data', v_W1_time);
+
+[v_W2_x, acc_W2_x] = firstsecondderivatives(W2(:,1),W2(:,2));
+[v_W2_z, acc_W2_z] = firstsecondderivatives(W2(:,1),W2(:,3));
+v_W2_data = [v_W2_x; v_W2_z];
+v_W2_time = W2(:,1);
+v_W2_ts = timeseries(v_W2_data', v_W2_time);
+
+[v_W3_x, acc_W3_x] = firstsecondderivatives(W3(:,1),W3(:,2));
+[v_W3_z, acc_W3_z] = firstsecondderivatives(W3(:,1),W3(:,3));
+v_W3_data = [v_W3_x; v_W3_z];
+v_W3_time = W3(:,1);
+v_W3_ts = timeseries(v_W3_data', v_W3_time);
+
+% for i=1:length(v_W1_x)
+%     v_W1(i) = norm(v_W1_x(i),v_W1_z(i));
+% end
+% 
+% for i=1:length(v_W2_x)
+%     v_W2(i) = norm(v_W2_x(i),v_W2_z(i));
+% end
+% 
+% for i=1:length(v_W3_x)
+%     v_W3(i) = norm(v_W3_x(i),v_W3_z(i));
+% end
+% 
+% S = slipRatio(v_W1,v_ref);
+
 %v_ref_ts = timeseries(v_ref_data, rocker_ts.Time(1:end-1));
 %
 % v_ref_eu_ts = timeseries(v_ref_x(:),v_ref_z(:), Rocker(:,1), 'name','vel_eu');
