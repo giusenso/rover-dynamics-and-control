@@ -5,7 +5,7 @@
 load_system('roverDynamics');
 save_system('roverDynamics');
 clc; clear all; close all; warning off;
-%bdclose('all');
+bdclose('all');
 rehash;
 % sl_refresh_customizations;
 % exit
@@ -90,7 +90,7 @@ set_param('roverDynamics','StartTime','0','StopTime',stopTime);
 simulation = sim('roverDynamics'); % running model from script
 variablesFromSimulink;
 
-Plots
+%Plots
 
 taskDuration = seconds(totalTime);
 taskDuration.Format = 'hh:mm:ss.SSS';
