@@ -17,7 +17,9 @@ choice = 0; % picture 4 recommended
 
 LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
 filenameWorkspace = 'standardTerrainProfile_workspace';
-CREATE_VIDEO = 0; % Set 1 to plot rover animation and save it
+CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
+
+PLOTS = 0; % Set 1 to plot results from simulink
 
 DATA_AUGMENTATION = 10; % 10; % Set different from 0 if the simulation shows implausibility due to the lack of samplepoints
                        % If different from 0 the simulation time will increase exponentially
@@ -90,7 +92,9 @@ set_param('roverDynamics','StartTime','0','StopTime',stopTime);
 simulation = sim('roverDynamics'); % running model from script
 variablesFromSimulink;
 
-%Plots
+if PLOTS == 1
+    Plots
+end
 
 taskDuration = seconds(totalTime);
 taskDuration.Format = 'hh:mm:ss.SSS';
@@ -105,5 +109,5 @@ if CREATE_VIDEO == 1
     fprintf("Rendering video... (%f [s])\n",tFinish);
     createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,...
         u_input_vec,vel_x_vec,v_ref_ts_vec(:,1:2),vel_error_x_vec,speed,maxTorque,...
-        pos_ref_ts_vec(:,1:2),pos_x_vec,pos_error_x_vec);
+        pos_ref_ts_vec(:,1:2),pos_x_vec,pos_error_x_vec,taskDuration,distanceTraveled);
 end
