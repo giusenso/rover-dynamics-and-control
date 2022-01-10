@@ -17,7 +17,7 @@ choice = 0; % picture 4 recommended
 
 LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
 filenameWorkspace = 'standardTerrainProfile_workspace';
-CREATE_VIDEO = 1; % Set 1 to plot rover animation and save it
+CREATE_VIDEO = 0; % Set 1 to plot rover animation and save it
 
 PLOTS = 0; % Set 1 to plot results from simulink
 
