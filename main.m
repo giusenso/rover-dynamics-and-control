@@ -5,7 +5,7 @@
 load_system('roverDynamics');
 save_system('roverDynamics');
 clc; clear all; close all; warning off;
-bdclose('all');
+%bdclose('all');
 rehash;
 % sl_refresh_customizations;
 % exit
@@ -19,7 +19,7 @@ LOAD_WORKSPACE = 1; % To speed up the simulation load a prebuilt workspace
 filenameWorkspace = 'standardTerrainProfile_workspace';
 CREATE_VIDEO = 0; % Set 1 to plot rover animation and save it
 
-PLOTS = 0; % Set 1 to plot results from simulink
+PLOTS = 1; % Set 1 to plot results from simulink
 
 DATA_AUGMENTATION = 10; % 10; % Set different from 0 if the simulation shows implausibility due to the lack of samplepoints
                        % If different from 0 the simulation time will increase exponentially
