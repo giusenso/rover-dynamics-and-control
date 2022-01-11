@@ -353,7 +353,7 @@ legend({'T2 Pacejka input','T2 bounds'},'Location', 'Best','Orientation','horizo
 figure(15)
 
 subplot(3,1,1);
-title('Traction control Wheel 1')
+title('Traction control Wheel 3')
 %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
 hold on
 plot(T3_vec(1:end,1),T3_vec(1:end,4),'Color','b','LineWidth',1.5);
@@ -438,7 +438,7 @@ ylim([infY supY])
 
 figure(17)
 
-title('Slip Ratios')
+title('Normal forces')
 %set(gca, 'XAxisLocation', 'origin', 'YAxisLocation', 'origin')
 hold on
 plot(N_vec(1:end,1),N_vec(1:end,2:4), 'LineWidth',1.5);

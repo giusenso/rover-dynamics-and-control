@@ -1,5 +1,3 @@
-% https://www.uahirise.org/ESP_068360_1985 (25 February 2021)
-
 %% Simulink File
 
 load_system('roverDynamics');
