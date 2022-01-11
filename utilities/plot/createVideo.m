@@ -1,4 +1,4 @@
-function createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,u_input_vec,vel_vec,v_ref_ts_vec,vel_error_vec,speed,maxTorque,pos_ref_ts_vec,pos_vec,pos_error_vec,taskDuration,distanceTraveled)
+function videoName = createVideo(terrainProfileTime,W1,W2,W3,r,Bogie,Rocker,u_input_vec,vel_vec,v_ref_ts_vec,vel_error_vec,speed,maxTorque,pos_ref_ts_vec,pos_vec,pos_error_vec,taskDuration,distanceTraveled)
 
 %% Draw/Render the Scenario
 %figh = figure; % figure handle
