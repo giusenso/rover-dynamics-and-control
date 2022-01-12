@@ -5,7 +5,7 @@
   <img src="report%and%presentation/markdown_images/perseverance3D.png"/>
 </p>
 
-Further details can be found in the detailed [report](./report%and%presentation/report.pdf)
+Further details can be found in the detailed [report](./report%20and%20presentation/report.pdf)
 
 ### Repository structure
 ```
